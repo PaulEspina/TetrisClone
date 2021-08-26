@@ -22,12 +22,15 @@ public:
             color = sf::Color(255, 51, 255);
             break;
         case 3:
-            color = sf::Color(255, 187, 51);
+            color = sf::Color(51, 51, 255);
             break;
         case 4:
-            color = sf::Color(51, 255, 51);
+            color = sf::Color(255, 187, 51);
             break;
         case 5:
+            color = sf::Color(51, 255, 51);
+            break;
+        case 6:
             color = sf::Color(255, 51, 85);
             break;
         }

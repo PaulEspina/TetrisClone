@@ -7,10 +7,9 @@ class Block
 public:
     Block() = default;
 
-    Block(sf::Vector2u gridPos, int type, unsigned int blockSize)
+    Block(sf::Vector2u gridPos, int type)
     {
         this->gridPos = gridPos;
-        rect = sf::RectangleShape(sf::Vector2f(blockSize, blockSize));
         switch(type)
         {
         case 0:
@@ -32,13 +31,6 @@ public:
             color = sf::Color(255, 51, 85);
             break;
         }
-        this->blockSize = blockSize;
-    }
-
-    void update()
-    {
-        rect.setPosition(translateGrid(gridPos));
-        rect.setFillColor(color);
     }
 
     void setGridPos(sf::Vector2u gridPos)
@@ -56,21 +48,7 @@ public:
         return color;
     }
 
-    sf::RectangleShape* getRect()
-    {
-        return &rect;
-    }
-
 private:
-    sf::RectangleShape rect;
     sf::Vector2u gridPos;
     sf::Color color;
-    unsigned int blockSize;
-
-    sf::Vector2f translateGrid(sf::Vector2u gridPos)
-    {
-        float x = gridPos.x * blockSize;
-        float y= gridPos.y * blockSize;
-        return sf::Vector2f(x, y);
-    }
 };

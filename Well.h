@@ -12,24 +12,27 @@ public:
 
     Well(sf::Vector2f pos)
     {
-        rect = sf::RectangleShape(sf::Vector2f(WIDTH, HEIGHT));
-        rect.setPosition(pos);
-        rect.setFillColor(sf::Color(50, 50, 50));
+        wellRect = sf::RectangleShape(sf::Vector2f(WIDTH, HEIGHT));
+        wellRect.setPosition(pos);
+        wellRect.setFillColor(sf::Color(50, 50, 50));
+        blockDrawer = sf::RectangleShape(sf::Vector2f(getBlockSize(), getBlockSize()));
     }
 
     void draw(sf::RenderWindow& window)
     {
-        window.draw(rect);
+        window.draw(wellRect);
 
-        for(sf::RectangleShape* rectBlock : rectBlocks)
+        for(Block* block : blocks)
         {
-            window.draw(*rectBlock);
+            blockDrawer.setFillColor(block->getColor());
+            blockDrawer.setPosition(translateGrid(block->getGridPos()));
+            window.draw(blockDrawer);
         }
     }
 
     void addBlock(Block* block)
     {
-        rectBlocks.push_back(block->getRect());
+        blocks.push_back(block);
     }
 
     unsigned int getBlockSize()
@@ -38,12 +41,20 @@ public:
     }
 
 private:
-    sf::RectangleShape rect;
-    std::vector<sf::RectangleShape*> rectBlocks;
+    sf::RectangleShape blockDrawer;
+    sf::RectangleShape wellRect;
+    std::vector<Block*> blocks;
 
     // make sure these constants will result to a square block filling the whole area
     const unsigned int WIDTH = 300;
     const unsigned int HEIGHT = 600;
     const unsigned int MAX_GRIDX = 10;
     const unsigned int MAX_GRIDY = 24;
+
+    sf::Vector2f translateGrid(sf::Vector2u gridPos)
+    {
+        float x = gridPos.x * getBlockSize();
+        float y = gridPos.y * getBlockSize();
+        return sf::Vector2f(x, y);
+    }
 };

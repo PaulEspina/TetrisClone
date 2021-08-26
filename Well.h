@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "Tetromino.h"
 #include "Block.h"
 
 
@@ -27,6 +28,15 @@ public:
             blockDrawer.setFillColor(block->getColor());
             blockDrawer.setPosition(translateGrid(block->getGridPos()));
             window.draw(blockDrawer);
+        }
+    }
+
+    void addTetromino(Tetromino *tetromino)
+    {
+        Block *tetBlocks = tetromino->getBlocks();
+        for(unsigned int i = 0; i < tetromino->getNumOfBlocks(); i++)
+        {
+            blocks.push_back(&tetBlocks[i]);
         }
     }
 

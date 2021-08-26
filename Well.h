@@ -1,69 +1,85 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include "Tetromino.h"
-
 
 class Well
 {
 public:
-    Well() = default;
-
-    Well(sf::Vector2f pos)
+    Well()
     {
-        wellRect = sf::RectangleShape(sf::Vector2f(WIDTH, HEIGHT));
-        wellRect.setPosition(pos);
-        wellRect.setFillColor(sf::Color(50, 50, 50));
-        blockDrawer = sf::RectangleShape(sf::Vector2f(getBlockSize(), getBlockSize()));
-    }
-
-    void draw(sf::RenderWindow &window)
-    {
-        window.draw(wellRect);
-
-        for(Block* block : blocks)
+        for(unsigned int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
         {
-            blockDrawer.setFillColor(block->getColor());
-            blockDrawer.setPosition(translateGrid(block->getGridPos()));
-            window.draw(blockDrawer);
+            unsigned int gridX = i % WELL_WIDTH;
+            unsigned int gridY = i / WELL_WIDTH;
+            well[gridY][gridX] = '0';
+            wellRects[i] = sf::RectangleShape(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+            wellRects[i].setPosition(sf::Vector2f(gridX * BLOCK_SIZE, gridY * BLOCK_SIZE));
+            wellRects[i].setOutlineColor(sf::Color::Black);
+            wellRects[i].setOutlineThickness(1);
         }
     }
 
-    void addTetromino(Tetromino *tetromino)
+    void update()
     {
-        Block *tetBlocks = tetromino->getBlocks();
-        for(unsigned int i = 0; i < tetromino->getNumOfBlocks(); i++)
+        for(unsigned int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
         {
-            blocks.push_back(&tetBlocks[i]);
+            switch(well[i / WELL_WIDTH][i % WELL_WIDTH])
+            {
+            case '0':
+                wellRects[i].setFillColor(sf::Color(50, 50, 50));
+                break;
+            case '1':
+                wellRects[i].setFillColor(sf::Color(51, 255, 255));
+                break;
+            case '2':
+                wellRects[i].setFillColor(sf::Color(255, 255, 51));
+                break;
+            case '3':
+                wellRects[i].setFillColor(sf::Color(255, 51, 255));
+                break;
+            case '4':
+                wellRects[i].setFillColor(sf::Color(51, 51, 255));
+                break;
+            case '5':
+                wellRects[i].setFillColor(sf::Color(255, 187, 51));
+                break;
+            case '6':
+                wellRects[i].setFillColor(sf::Color(51, 255, 51));
+                break;
+            case '7':
+                wellRects[i].setFillColor(sf::Color(255, 51, 85));
+                break;
+            }
         }
     }
 
-    void addBlock(Block *block)
+    void render(sf::RenderWindow *window)
     {
-        blocks.push_back(block);
+        for(sf::RectangleShape wellRect : wellRects)
+        {
+            window->draw(wellRect);
+        }
     }
 
-    unsigned int getBlockSize()
+    void showCurrentPiece(Tetromino tetromino)
     {
-        return WIDTH / MAX_GRIDX;
+        for(unsigned int i = 0; i < 4; i++)
+        {
+            for(unsigned int j = 0; j < 4; j++)
+            {
+                char shape[4][4];
+                tetromino.getShape(shape);
+                well[tetromino.getGridPos().y + i][tetromino.getGridPos().x + j] = shape[i][j];
+            }
+        }
     }
 
 private:
-    sf::RectangleShape blockDrawer;
-    sf::RectangleShape wellRect;
-    std::vector<Block*> blocks;
+    static const int WELL_WIDTH = 10;
+    static const int WELL_HEIGHT = 20;
+    static const int BLOCK_SIZE = 25;
 
-    // make sure these constants will result to a square block filling the whole area
-    const unsigned int WIDTH = 300;
-    const unsigned int HEIGHT = 600;
-    const unsigned int MAX_GRIDX = 10;
-    const unsigned int MAX_GRIDY = 24;
-
-    sf::Vector2f translateGrid(sf::Vector2u gridPos)
-    {
-        float x = gridPos.x * getBlockSize();
-        float y = gridPos.y * getBlockSize();
-        return sf::Vector2f(x, y);
-    }
+    char well[WELL_HEIGHT][WELL_WIDTH];
+    sf::RectangleShape wellRects[WELL_WIDTH * WELL_HEIGHT];
 };

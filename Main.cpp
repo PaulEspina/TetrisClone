@@ -8,10 +8,11 @@ int main()
     sf::Clock clock;
 
     Well well;
-    Tetromino currentPience(sf::Vector2u(0, 0), 1, 0);
+    Tetromino currentPiece(sf::Vector2u(0, 0), 1, 0);
 
     while(window.isOpen())
     {
+        // TICK
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -21,12 +22,30 @@ int main()
             }
             if(event.type == sf::Event::KeyPressed)
             {
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                {
+                    currentPiece.move(sf::Vector2u(-1, 0));
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                {
+                    currentPiece.move(sf::Vector2u(1, 0));
+                }
             }
         }
 
-        well.showCurrentPiece(currentPience);
+        // UPDATE
+
+        if(clock.getElapsedTime().asSeconds() > 1)
+        {
+            clock.restart();
+            currentPiece.move(sf::Vector2u(0, 1));
+        }
+
+        well.showCurrentPiece(currentPiece);
         well.update();
 
+
+        //DRAW
         window.clear();
 
         well.render(&window);

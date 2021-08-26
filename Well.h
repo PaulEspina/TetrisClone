@@ -52,6 +52,13 @@ public:
                 break;
             }
         }
+        for(unsigned int i = 0; i < 4; i++)
+        {
+            for(unsigned int j = 0; j < 4; j++)
+            {
+                well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = '0';
+            }
+        }
     }
 
     void render(sf::RenderWindow *window)
@@ -62,15 +69,16 @@ public:
         }
     }
 
-    void showCurrentPiece(Tetromino tetromino)
+    void showCurrentPiece(Tetromino currentPiece)
     {
+        this->currentPiece = currentPiece;
         for(unsigned int i = 0; i < 4; i++)
         {
             for(unsigned int j = 0; j < 4; j++)
             {
                 char shape[4][4];
-                tetromino.getShape(shape);
-                well[tetromino.getGridPos().y + i][tetromino.getGridPos().x + j] = shape[i][j];
+                currentPiece.getShape(shape);
+                well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
             }
         }
     }
@@ -82,4 +90,5 @@ private:
 
     char well[WELL_HEIGHT][WELL_WIDTH];
     sf::RectangleShape wellRects[WELL_WIDTH * WELL_HEIGHT];
+    Tetromino currentPiece;
 };

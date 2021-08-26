@@ -81,6 +81,16 @@ public:
         }
     }
 
+    void move(sf::Vector2u distance)
+    {
+        gridPos += distance;
+    }
+
+    void setGridPos(sf::Vector2u gridPos)
+    {
+        this->gridPos = gridPos;
+    }
+
     sf::Vector2u getGridPos()
     {
         return gridPos;

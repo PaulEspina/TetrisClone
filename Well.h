@@ -8,7 +8,7 @@ class Well
 public:
     Well()
     {
-        for(unsigned int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
+        for(int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
         {
             unsigned int gridX = i % WELL_WIDTH;
             unsigned int gridY = i / WELL_WIDTH;
@@ -22,7 +22,7 @@ public:
 
     void update()
     {
-        for(unsigned int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
+        for(int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
         {
             switch(well[i / WELL_WIDTH][i % WELL_WIDTH])
             {
@@ -52,11 +52,14 @@ public:
                 break;
             }
         }
-        for(unsigned int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++)
         {
-            for(unsigned int j = 0; j < 4; j++)
+            for(int j = 0; j < 4; j++)
             {
-                well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = '0';
+                if(currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0)
+                {
+                    well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = '0';
+                }
             }
         }
     }
@@ -72,13 +75,16 @@ public:
     void showCurrentPiece(Tetromino currentPiece)
     {
         this->currentPiece = currentPiece;
-        for(unsigned int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++)
         {
-            for(unsigned int j = 0; j < 4; j++)
+            for(int j = 0; j < 4; j++)
             {
                 char shape[4][4];
                 currentPiece.getShape(shape);
-                well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
+                if(shape[i][j] != '0')
+                {
+                    well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
+                }
             }
         }
     }

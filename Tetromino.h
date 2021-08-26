@@ -9,7 +9,7 @@ class Tetromino
 public:
     Tetromino() = default;
 
-    Tetromino(sf::Vector2u gridPos, unsigned int type, unsigned int rotation)
+    Tetromino(sf::Vector2i gridPos, unsigned int type, unsigned int rotation)
     {
         this->gridPos = gridPos;
         this->type = type;
@@ -72,26 +72,26 @@ public:
 
     void getShape(char shape[4][4])
     {
-        for(unsigned int i = 0; i < 4; i++)
+        for(int i = 0; i < 4; i++)
         {
-            for(unsigned int j = 0; j < 4; j++)
+            for(int j = 0; j < 4; j++)
             {
                 shape[i][j] = this->shape[i][j];
             }
         }
     }
 
-    void move(sf::Vector2u distance)
+    void move(sf::Vector2i distance)
     {
         gridPos += distance;
     }
 
-    void setGridPos(sf::Vector2u gridPos)
+    void setGridPos(sf::Vector2i gridPos)
     {
         this->gridPos = gridPos;
     }
 
-    sf::Vector2u getGridPos()
+    sf::Vector2i getGridPos()
     {
         return gridPos;
     }
@@ -100,5 +100,5 @@ private:
     char shape[4][4];
     unsigned int type;
     unsigned int rotation;
-    sf::Vector2u gridPos;
+    sf::Vector2i gridPos;
 };

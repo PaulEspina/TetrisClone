@@ -8,7 +8,7 @@ int main()
     sf::Clock clock;
 
     Well well;
-    Tetromino currentPiece(sf::Vector2u(0, 0), 1, 0);
+    Tetromino currentPiece(sf::Vector2i(0, 0), 1, 0);
 
     while(window.isOpen())
     {
@@ -24,11 +24,19 @@ int main()
             {
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 {
-                    currentPiece.move(sf::Vector2u(-1, 0));
+                    currentPiece.move(sf::Vector2i(-1, 0));
                 }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                 {
-                    currentPiece.move(sf::Vector2u(1, 0));
+                    currentPiece.move(sf::Vector2i(1, 0));
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                {
+                    currentPiece.move(sf::Vector2i(0, -1));
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                {
+                    currentPiece.move(sf::Vector2i(0, 1));
                 }
             }
         }
@@ -38,7 +46,7 @@ int main()
         if(clock.getElapsedTime().asSeconds() > 1)
         {
             clock.restart();
-            currentPiece.move(sf::Vector2u(0, 1));
+            currentPiece.move(sf::Vector2i(0, 1));
         }
 
         well.showCurrentPiece(currentPiece);

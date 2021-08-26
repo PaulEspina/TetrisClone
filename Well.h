@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "Tetromino.h"
-#include "Block.h"
 
 
 class Well
@@ -19,7 +18,7 @@ public:
         blockDrawer = sf::RectangleShape(sf::Vector2f(getBlockSize(), getBlockSize()));
     }
 
-    void draw(sf::RenderWindow& window)
+    void draw(sf::RenderWindow &window)
     {
         window.draw(wellRect);
 
@@ -40,7 +39,7 @@ public:
         }
     }
 
-    void addBlock(Block* block)
+    void addBlock(Block *block)
     {
         blocks.push_back(block);
     }

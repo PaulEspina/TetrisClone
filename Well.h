@@ -33,22 +33,22 @@ public:
                 wellRects[i].setFillColor(sf::Color(51, 255, 255));
                 break;
             case '2':
-                wellRects[i].setFillColor(sf::Color(255, 255, 51));
-                break;
-            case '3':
-                wellRects[i].setFillColor(sf::Color(255, 51, 255));
-                break;
-            case '4':
                 wellRects[i].setFillColor(sf::Color(51, 51, 255));
                 break;
-            case '5':
+            case '3':
                 wellRects[i].setFillColor(sf::Color(255, 187, 51));
+                break;
+            case '4':
+                wellRects[i].setFillColor(sf::Color(255, 255, 51));
+                break;
+            case '5':
+                wellRects[i].setFillColor(sf::Color(255, 51, 85));
                 break;
             case '6':
                 wellRects[i].setFillColor(sf::Color(51, 255, 51));
                 break;
             case '7':
-                wellRects[i].setFillColor(sf::Color(255, 51, 85));
+                wellRects[i].setFillColor(sf::Color(255, 51, 255));
                 break;
             }
         }
@@ -75,12 +75,11 @@ public:
     void showCurrentPiece(Tetromino currentPiece)
     {
         this->currentPiece = currentPiece;
-        for(int i = 0; i < 4; i++)
+        std::vector<std::vector<char>> shape = currentPiece.getShape();
+        for(unsigned int i = 0; i < shape.size(); i++)
         {
-            for(int j = 0; j < 4; j++)
+            for(unsigned int j = 0; j < shape[i].size(); j++)
             {
-                char shape[4][4];
-                currentPiece.getShape(shape);
                 if(shape[i][j] != '0')
                 {
                     well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];

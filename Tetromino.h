@@ -2,88 +2,130 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
-#include <array>
+#include <vector>
 
 class Tetromino
 {
 public:
     Tetromino() = default;
 
-    Tetromino(sf::Vector2i gridPos, unsigned int type, unsigned int rotation)
+    Tetromino(sf::Vector2i gridPos, unsigned int type)
     {
         this->gridPos = gridPos;
         this->type = type;
-        this->rotation = rotation;
 
-        for(unsigned int i = 0; i < 4; i++)
-        {
-            for(unsigned int j = 0; j < 4; j++)
-            {
-                shape[i][j] = '0';
-            }
-        }
-
-        switch(type)
-        {
-        case 1:
-            shape[1][0] = '1';
-            shape[1][1] = '1';
-            shape[1][2] = '1';
-            shape[1][3] = '1';
-            break;
-        case 2:
-            shape[0][0] = '2';
-            shape[1][0] = '2';
-            shape[1][1] = '2';
-            shape[1][2] = '2';
-            break;
-        case 3:
-            shape[0][2] = '3';
-            shape[1][0] = '3';
-            shape[1][1] = '3';
-            shape[1][2] = '3';
-            break;
-        case 4:
-            shape[0][1] = '4';
-            shape[0][2] = '4';
-            shape[1][1] = '4';
-            shape[1][2] = '4';
-            break;
-        case 5:
-            shape[0][1] = '5';
-            shape[0][2] = '5';
-            shape[1][0] = '5';
-            shape[1][1] = '5';
-            break;
-        case 6:
-            shape[0][0] = '6';
-            shape[0][1] = '6';
-            shape[1][1] = '6';
-            shape[1][2] = '6';
-            break;
-        case 7:
-            shape[0][1] = '7';
-            shape[1][0] = '7';
-            shape[1][1] = '7';
-            shape[1][2] = '7';
-            break;
-        }
+        setType(type);
     }
 
-    void getShape(char shape[4][4])
+    void rotateClockwise()
     {
-        for(int i = 0; i < 4; i++)
+        std::vector<std::vector<char>> newShape(shape);
+        for(unsigned int i = 0; i < shape.size(); i++)
         {
-            for(int j = 0; j < 4; j++)
+            for(unsigned int j = 0; j < shape[i].size(); j++)
             {
-                shape[i][j] = this->shape[i][j];
+                newShape[i][j] = shape[shape.size() - 1 - j][i];
             }
         }
+        shape = newShape;
+    }
+
+    void rotateCounterClockwise()
+    {
+        std::vector<std::vector<char>> newShape(shape);
+        for(unsigned int i = 0; i < shape.size(); i++)
+        {
+            for(unsigned int j = 0; j < shape[i].size(); j++)
+            {
+                newShape[i][j] = shape[j][shape.size() - 1 - i];
+            }
+        }
+        shape = newShape;
     }
 
     void move(sf::Vector2i distance)
     {
         gridPos += distance;
+    }
+
+    void setType(int type)
+    {
+        std::vector<std::vector<char>> temp;
+        int dimension = 3;
+        if(type == 1)
+        {
+            dimension = 4;
+        }
+        if(type == 4)
+        {
+            dimension = 2;
+        }
+        for(unsigned int i = 0; i < dimension; i++)
+        {
+            std::vector<char> row;
+            for(unsigned int j = 0; j < dimension; j++)
+            {
+                row.push_back('0');
+            }
+            temp.push_back(row);
+        }
+        switch(type)
+        {
+        case 1:
+            temp[1][0] = '1';
+            temp[1][1] = '1';
+            temp[1][2] = '1';
+            temp[1][3] = '1';
+            break;
+        case 2:
+            temp[0][0] = '2';
+            temp[1][0] = '2';
+            temp[1][1] = '2';
+            temp[1][2] = '2';
+            break;
+        case 3:
+            temp[0][2] = '3';
+            temp[1][0] = '3';
+            temp[1][1] = '3';
+            temp[1][2] = '3';
+            break;
+        case 4:
+            temp[0][0] = '4';
+            temp[0][1] = '4';
+            temp[1][0] = '4';
+            temp[1][1] = '4';
+            break;
+        case 5:
+            temp[0][1] = '5';
+            temp[0][2] = '5';
+            temp[1][0] = '5';
+            temp[1][1] = '5';
+            break;
+        case 6:
+            temp[0][0] = '6';
+            temp[0][1] = '6';
+            temp[1][1] = '6';
+            temp[1][2] = '6';
+            break;
+        case 7:
+            temp[0][1] = '7';
+            temp[1][0] = '7';
+            temp[1][1] = '7';
+            temp[1][2] = '7';
+            break;
+        }
+        shape = temp;
+        this->type = type;
+    }
+
+    unsigned int getType()
+    {
+        return type;
+    }
+
+    std::vector<std::vector<char>> getShape()
+    {
+        return shape;
     }
 
     void setGridPos(sf::Vector2i gridPos)
@@ -97,8 +139,7 @@ public:
     }
 
 private:
-    char shape[4][4];
+    std::vector<std::vector<char>> shape;
     unsigned int type;
-    unsigned int rotation;
     sf::Vector2i gridPos;
 };

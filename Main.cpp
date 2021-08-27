@@ -8,11 +8,12 @@ int main()
     sf::Clock clock;
 
     Well well;
-    Tetromino currentPiece(sf::Vector2i(0, 0), 1, 0);
+    Tetromino currentPiece(sf::Vector2i(0, 0), 6);
 
     while(window.isOpen())
     {
         // TICK
+
         sf::Event event;
         while(window.pollEvent(event))
         {
@@ -38,22 +39,35 @@ int main()
                 {
                     currentPiece.move(sf::Vector2i(0, 1));
                 }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+                {
+                    currentPiece.rotateCounterClockwise();
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+                {
+                    currentPiece.rotateClockwise();
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+                {
+                    currentPiece.setType((currentPiece.getType() + 1) % 8);
+                }
             }
         }
 
         // UPDATE
 
-        if(clock.getElapsedTime().asSeconds() > 1)
-        {
-            clock.restart();
-            currentPiece.move(sf::Vector2i(0, 1));
-        }
+        //if(clock.getElapsedTime().asSeconds() > 1)
+        //{
+        //    clock.restart();
+        //    currentPiece.move(sf::Vector2i(0, 1));
+        //}
 
         well.showCurrentPiece(currentPiece);
         well.update();
 
 
         //DRAW
+
         window.clear();
 
         well.render(&window);

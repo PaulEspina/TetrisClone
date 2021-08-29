@@ -82,6 +82,10 @@ int main()
         //    currentPiece.move(sf::Vector2i(0, 1));
         //}
 
+        if(!well.inBounds(currentPiece))
+        {
+            well.findValidGrid(currentPiece);
+        }
         well.showCurrentPiece(currentPiece);
         well.update();
 

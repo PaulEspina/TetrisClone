@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClInclude Include="Tetromino.h" />
     <ClInclude Include="Well.h" />
+    <ClInclude Include="KeyManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

@@ -87,8 +87,6 @@ public:
 
     void placePiece(Tetromino tetromino)
     {
-        //TODO check bounds first before placing
-
         std::vector<std::vector<char>> shape = currentPiece.getShape();
         sf::Vector2i gridPos = currentPiece.getGridPos();
         for(unsigned int i = 0; i < shape.size(); i++)
@@ -142,6 +140,64 @@ public:
             return false;
         }
         return true;
+    }
+
+    void findValidGrid(Tetromino &tetromino)
+    {
+        int intervalX = 1;
+        int intervalY = 1;
+        bool success = false;
+        while(!success)
+        {
+            if(intervalX < WELL_WIDTH)
+            {
+                tetromino.move(sf::Vector2i(intervalX, 0));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(-intervalX, 0));
+                }
+                tetromino.move(sf::Vector2i(-intervalX, 0));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(intervalX, 0));
+                }
+                intervalX++;
+            }
+            if(!success && intervalY < WELL_HEIGHT)
+            {
+                tetromino.move(sf::Vector2i(0, intervalY));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(0, -intervalY));
+                }
+                tetromino.move(sf::Vector2i(0, -intervalY));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(0, intervalY));
+                }
+                intervalY++;
+            }
+        }
     }
 
 private:

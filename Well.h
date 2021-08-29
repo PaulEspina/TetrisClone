@@ -8,15 +8,20 @@ class Well
 public:
     Well()
     {
-        for(int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
+        for(unsigned int i = 0; i < WELL_HEIGHT; i++)
         {
-            unsigned int gridX = i % WELL_WIDTH;
-            unsigned int gridY = i / WELL_WIDTH;
-            well[gridY][gridX] = '0';
-            wellRects[i] = sf::RectangleShape(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
-            wellRects[i].setPosition(sf::Vector2f(gridX * BLOCK_SIZE, gridY * BLOCK_SIZE));
-            wellRects[i].setOutlineColor(sf::Color::Black);
-            wellRects[i].setOutlineThickness(1);
+            std::vector<char> row;
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
+            {
+                row.push_back('0');
+                sf::RectangleShape rs(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
+                rs.setPosition(sf::Vector2f(j * BLOCK_SIZE, i * BLOCK_SIZE));
+                rs.setOutlineColor(sf::Color::Black);
+                rs.setOutlineThickness(1);
+                wellRects.push_back(rs);
+
+            }
+            well.push_back(row);
         }
     }
 
@@ -52,9 +57,9 @@ public:
                 break;
             }
         }
-        for(int i = 0; i < 4; i++)
+        for(unsigned int i = 0; i < currentPiece.getShape().size(); i++)
         {
-            for(int j = 0; j < 4; j++)
+            for(unsigned int j = 0; j < currentPiece.getShape()[0].size(); j++)
             {
                 if(currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0)
                 {
@@ -93,7 +98,7 @@ private:
     static const int WELL_HEIGHT = 20;
     static const int BLOCK_SIZE = 25;
 
-    char well[WELL_HEIGHT][WELL_WIDTH];
-    sf::RectangleShape wellRects[WELL_WIDTH * WELL_HEIGHT];
+    std::vector<std::vector<char>> well;
+    std::vector<sf::RectangleShape> wellRects;
     Tetromino currentPiece;
 };

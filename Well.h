@@ -72,13 +72,14 @@ public:
     {
         this->currentPiece = currentPiece;
         std::vector<std::vector<char>> shape = currentPiece.getShape();
+        sf::Vector2i gridPos = currentPiece.getGridPos();
         for(unsigned int i = 0; i < shape.size(); i++)
         {
             for(unsigned int j = 0; j < shape[i].size(); j++)
             {
-                if(shape[i][j] != '0' && currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0 && currentPiece.getGridPos().y + i < WELL_HEIGHT && currentPiece.getGridPos().x + j < WELL_WIDTH)
+                if(inBounds(gridPos, i, j, shape))
                 {
-                    well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
+                    well[gridPos.y + i][gridPos.x + j] = shape[i][j];
                 }
             }
         }
@@ -89,16 +90,58 @@ public:
         //TODO check bounds first before placing
 
         std::vector<std::vector<char>> shape = currentPiece.getShape();
+        sf::Vector2i gridPos = currentPiece.getGridPos();
         for(unsigned int i = 0; i < shape.size(); i++)
         {
             for(unsigned int j = 0; j < shape[i].size(); j++)
             {
-                if(shape[i][j] != '0' && currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0 && currentPiece.getGridPos().y + i < WELL_HEIGHT && currentPiece.getGridPos().x + j < WELL_WIDTH)
+                if(inBounds(gridPos, i, j, shape))
                 {
-                    newWell[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
+                    newWell[gridPos.y + i][gridPos.x + j] = shape[i][j];
                 }
             }
         }
+    }
+
+    bool inBounds(Tetromino tetromino)
+    {
+        std::vector<std::vector<char>> shape = tetromino.getShape();
+        sf::Vector2i gridPos = tetromino.getGridPos();
+        for(unsigned int i = 0; i < shape.size(); i++)
+        {
+            for(unsigned int j = 0; j < shape[i].size(); j++)
+            {
+                if(shape[i][j] != '0' &&
+                   (gridPos.y + i < 0 || gridPos.x + j < 0 ||
+                   gridPos.y + i >= WELL_HEIGHT || gridPos.x + j >= WELL_WIDTH))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool inBounds(sf::Vector2i gridPos, unsigned int i, unsigned int j, std::vector<std::vector<char>> shape)
+    {
+        if(shape[i][j] == '0' ||
+           gridPos.y + i < 0 || gridPos.x + j < 0 ||
+           gridPos.y + i >= WELL_HEIGHT || gridPos.x + j >= WELL_WIDTH)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    bool inBounds(int y, int x, unsigned int i, unsigned int j, std::vector<std::vector<char>> shape)
+    {
+        if(shape[i][j] == '0' ||
+           y + i < 0 || x + j < 0 ||
+           y + i >= WELL_HEIGHT || x + j >= WELL_WIDTH)
+        {
+            return false;
+        }
+        return true;
     }
 
 private:

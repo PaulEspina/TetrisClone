@@ -19,10 +19,10 @@ public:
                 rs.setOutlineColor(sf::Color::Black);
                 rs.setOutlineThickness(1);
                 wellRects.push_back(rs);
-
             }
             well.push_back(row);
         }
+        newWell = well;
     }
 
     void update()
@@ -57,16 +57,7 @@ public:
                 break;
             }
         }
-        for(unsigned int i = 0; i < currentPiece.getShape().size(); i++)
-        {
-            for(unsigned int j = 0; j < currentPiece.getShape()[0].size(); j++)
-            {
-                if(currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0)
-                {
-                    well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = '0';
-                }
-            }
-        }
+        well = newWell;
     }
 
     void render(sf::RenderWindow *window)
@@ -85,9 +76,26 @@ public:
         {
             for(unsigned int j = 0; j < shape[i].size(); j++)
             {
-                if(shape[i][j] != '0')
+                if(shape[i][j] != '0' && currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0 && currentPiece.getGridPos().y + i < WELL_HEIGHT && currentPiece.getGridPos().x + j < WELL_WIDTH)
                 {
                     well[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
+                }
+            }
+        }
+    }
+
+    void placePiece(Tetromino tetromino)
+    {
+        //TODO check bounds first before placing
+
+        std::vector<std::vector<char>> shape = currentPiece.getShape();
+        for(unsigned int i = 0; i < shape.size(); i++)
+        {
+            for(unsigned int j = 0; j < shape[i].size(); j++)
+            {
+                if(shape[i][j] != '0' && currentPiece.getGridPos().y + i >= 0 && currentPiece.getGridPos().x + j >= 0 && currentPiece.getGridPos().y + i < WELL_HEIGHT && currentPiece.getGridPos().x + j < WELL_WIDTH)
+                {
+                    newWell[currentPiece.getGridPos().y + i][currentPiece.getGridPos().x + j] = shape[i][j];
                 }
             }
         }
@@ -99,6 +107,7 @@ private:
     static const int BLOCK_SIZE = 25;
 
     std::vector<std::vector<char>> well;
+    std::vector<std::vector<char>> newWell;
     std::vector<sf::RectangleShape> wellRects;
     Tetromino currentPiece;
 };

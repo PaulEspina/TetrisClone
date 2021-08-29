@@ -26,18 +26,34 @@ int main()
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                 {
                     currentPiece.move(sf::Vector2i(-1, 0));
+                    if(!well.inBounds(currentPiece))
+                    {
+                        currentPiece.move(sf::Vector2i(1, 0));
+                    }
                 }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                 {
                     currentPiece.move(sf::Vector2i(1, 0));
+                    if(!well.inBounds(currentPiece))
+                    {
+                        currentPiece.move(sf::Vector2i(-1, 0));
+                    }
                 }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                 {
                     currentPiece.move(sf::Vector2i(0, -1));
+                    if(!well.inBounds(currentPiece))
+                    {
+                        currentPiece.move(sf::Vector2i(0, 1));
+                    }
                 }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                 {
                     currentPiece.move(sf::Vector2i(0, 1));
+                    if(!well.inBounds(currentPiece))
+                    {
+                        currentPiece.move(sf::Vector2i(0, -1));
+                    }
                 }
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 {
@@ -50,6 +66,10 @@ int main()
                 if(sf::Keyboard::isKeyPressed(sf::Keyboard::C))
                 {
                     currentPiece.setType((currentPiece.getType() + 1) % 8);
+                }
+                if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                {
+                    well.placePiece(currentPiece);
                 }
             }
         }

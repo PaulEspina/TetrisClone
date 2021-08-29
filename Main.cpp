@@ -24,6 +24,7 @@ int main()
             }
             keyManager.update(event);
         }
+
         if(keyManager.isDown(sf::Keyboard::Q))
         {
             currentPiece.rotateCounterClockwise();

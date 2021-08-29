@@ -23,11 +23,6 @@ public:
 		}
 	}
 
-	/*void press(int key)
-	{
-		keys[key] = true;
-	}*/
-
 	bool isDown(int key)
 	{
 		return keys[key];

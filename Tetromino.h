@@ -1,13 +1,17 @@
 #pragma once
 
 #include <string>
-#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <vector>
 
 class Tetromino
 {
 public:
-    Tetromino() = default;
+    Tetromino()
+    {
+        gridPos = sf::Vector2i(0, 0);
+        type = 0;
+    }
 
     Tetromino(sf::Vector2i gridPos, unsigned int type)
     {
@@ -60,10 +64,10 @@ public:
         {
             dimension = 2;
         }
-        for(unsigned int i = 0; i < dimension; i++)
+        for(int i = 0; i < dimension; i++)
         {
             std::vector<char> row;
-            for(unsigned int j = 0; j < dimension; j++)
+            for(int j = 0; j < dimension; j++)
             {
                 row.push_back('0');
             }

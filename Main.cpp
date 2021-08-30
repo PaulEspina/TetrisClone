@@ -7,7 +7,7 @@
 int main()
 {
     srand((unsigned int) time(0));
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Tetris");
+    sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
     sf::Clock clock;
     KeyManager keyManager;

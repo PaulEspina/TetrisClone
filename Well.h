@@ -12,9 +12,9 @@ public:
     {
         occupiedHeight = 0;
         this->pos = pos;
-        wellRect.setPosition(pos);
+        wellRect.setPosition(pos + sf::Vector2f(0, EXTRA_BLOCK * BLOCK_SIZE));
         wellRect.setFillColor(sf::Color(50, 50, 50));
-        wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE));
+        wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE - EXTRA_BLOCK * BLOCK_SIZE));
         for(unsigned int i = 0; i < WELL_HEIGHT; i++)
         {
             std::vector<char> row;
@@ -171,9 +171,19 @@ public:
     void render(sf::RenderWindow *window)
     {
         window->draw(wellRect);
-        for(sf::RectangleShape wellRect : blockRects)
+        /*for(sf::RectangleShape wellRect : blockRects)
         {
             window->draw(wellRect);
+        }*/
+        for(int i = 0; i < WELL_HEIGHT; i++)
+        {
+            for(int j = 0; j < WELL_WIDTH; j++)
+            {
+                if((i < EXTRA_BLOCK && blockRects[i * WELL_WIDTH + j].getFillColor() != sf::Color(50, 50, 50)) || i >= EXTRA_BLOCK)
+                {
+                    window->draw(blockRects[i * WELL_WIDTH + j]);
+                }
+            }
         }
     }
 
@@ -307,9 +317,10 @@ public:
     }
 
 private:
-    static const int WELL_WIDTH = 10;
-    static const int WELL_HEIGHT = 20;
     static const int BLOCK_SIZE = 25;
+    static const int EXTRA_BLOCK = 3;
+    static const int WELL_WIDTH = 10;
+    static const int WELL_HEIGHT = 20 + EXTRA_BLOCK;
 
     std::vector<std::vector<char>> well;
     std::vector<std::vector<char>> newWell;

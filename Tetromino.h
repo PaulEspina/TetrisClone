@@ -13,6 +13,20 @@ public:
         type = 0;
     }
 
+    Tetromino(unsigned int type)
+    {
+        if(type == 4)
+        {
+            this->gridPos = sf::Vector2i(4, 0);
+        }
+        else
+        {
+            this->gridPos = sf::Vector2i(3, 0);
+        }
+        this->type = type;
+        setType(type);
+    }
+
     Tetromino(sf::Vector2i gridPos, unsigned int type)
     {
         this->gridPos = gridPos;

@@ -17,6 +17,7 @@ int main()
     {
         // TICK
         sf::Event event;
+        keyManager.init();
         while(window.pollEvent(event))
         {
             if(event.type == sf::Event::Closed)
@@ -58,25 +59,21 @@ int main()
                 currentPiece.move(sf::Vector2i(0, -1));
             }
         }
-        if(keyManager.isDown(sf::Keyboard::Q))
+        if(keyManager.isPressed(sf::Keyboard::Q))
         {
             currentPiece.rotateCounterClockwise();
-            keyManager.reset(sf::Keyboard::Q);
         }
-        if(keyManager.isDown(sf::Keyboard::E))
+        if(keyManager.isPressed(sf::Keyboard::E))
         {
             currentPiece.rotateClockwise();
-            keyManager.reset(sf::Keyboard::E);
         }
-        if(keyManager.isDown(sf::Keyboard::C))
+        if(keyManager.isPressed(sf::Keyboard::C))
         {
             currentPiece.setType((currentPiece.getType() + 1) % 8);
-            keyManager.reset(sf::Keyboard::C);
         }
-        if(keyManager.isDown(sf::Keyboard::Space))
+        if(keyManager.isPressed(sf::Keyboard::Space))
         {
             well.placePiece(currentPiece);
-            keyManager.reset(sf::Keyboard::Space);
         }
 
         // UPDATE

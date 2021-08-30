@@ -8,7 +8,7 @@ public:
 	KeyManager()
 	{
 		keys = new int[sf::Keyboard::KeyCount];
-		resetKeys();
+		reset();
 	}
 
 	void update(sf::Event event)
@@ -28,12 +28,17 @@ public:
 		return keys[key];
 	}
 
-	void resetKeys()
+	void reset()
 	{
 		for(int i = 0; i < sf::Keyboard::KeyCount; i++)
 		{
 			keys[i] = false;
 		}
+	}
+
+	void reset(int key)
+	{
+		keys[key] = false;
 	}
 private:
 	int *keys;

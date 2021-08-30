@@ -6,11 +6,12 @@ int main()
 {
 
     sf::RenderWindow window(sf::VideoMode(800, 600), "Tetris");
+    window.setKeyRepeatEnabled(false);
     sf::Clock clock;
     KeyManager keyManager;
 
     Well well;
-    Tetromino currentPiece(sf::Vector2i(0, 0), 6);
+    Tetromino currentPiece(sf::Vector2i(0, 0), 1);
 
     while(window.isOpen())
     {
@@ -25,18 +26,6 @@ int main()
             keyManager.update(event);
         }
 
-        if(keyManager.isDown(sf::Keyboard::Q))
-        {
-            currentPiece.rotateCounterClockwise();
-        }
-        if(keyManager.isDown(sf::Keyboard::E))
-        {
-            currentPiece.rotateClockwise();
-        }
-        if(keyManager.isDown(sf::Keyboard::C))
-        {
-            currentPiece.setType((currentPiece.getType() + 1) % 8);
-        }
         if(keyManager.isDown(sf::Keyboard::A))
         {
             currentPiece.move(sf::Vector2i(-1, 0));
@@ -69,18 +58,35 @@ int main()
                 currentPiece.move(sf::Vector2i(0, -1));
             }
         }
+        if(keyManager.isDown(sf::Keyboard::Q))
+        {
+            currentPiece.rotateCounterClockwise();
+            keyManager.reset(sf::Keyboard::Q);
+        }
+        if(keyManager.isDown(sf::Keyboard::E))
+        {
+            currentPiece.rotateClockwise();
+            keyManager.reset(sf::Keyboard::E);
+        }
+        if(keyManager.isDown(sf::Keyboard::C))
+        {
+            currentPiece.setType((currentPiece.getType() + 1) % 8);
+            keyManager.reset(sf::Keyboard::C);
+        }
         if(keyManager.isDown(sf::Keyboard::Space))
         {
             well.placePiece(currentPiece);
+            keyManager.reset(sf::Keyboard::Space);
         }
 
         // UPDATE
 
-        //if(clock.getElapsedTime().asSeconds() > 1)
-        //{
-        //    clock.restart();
-        //    currentPiece.move(sf::Vector2i(0, 1));
-        //}
+        if(clock.getElapsedTime().asSeconds() > 1)
+        {
+            clock.restart();
+            
+            //currentPiece.move(sf::Vector2i(0, 1));
+        }
 
         if(!well.inBounds(currentPiece))
         {

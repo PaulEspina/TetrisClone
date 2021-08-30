@@ -17,7 +17,6 @@ public:
     {
         this->gridPos = gridPos;
         this->type = type;
-
         setType(type);
     }
 
@@ -100,16 +99,16 @@ public:
             temp[1][1] = '4';
             break;
         case 5:
+            temp[0][0] = '5';
             temp[0][1] = '5';
-            temp[0][2] = '5';
-            temp[1][0] = '5';
             temp[1][1] = '5';
+            temp[1][2] = '5';
             break;
         case 6:
-            temp[0][0] = '6';
             temp[0][1] = '6';
+            temp[0][2] = '6';
+            temp[1][0] = '6';
             temp[1][1] = '6';
-            temp[1][2] = '6';
             break;
         case 7:
             temp[0][1] = '7';

@@ -2,12 +2,15 @@
 
 #include <SFML/Graphics.hpp>
 #include "Tetromino.h"
+#include <vector>
+#include <stack>
 
 class Well
 {
 public:
     Well(sf::Vector2f pos = sf::Vector2f(0,0))
     {
+        occupiedHeight = 0;
         this->pos = pos;
         wellRect.setPosition(pos);
         wellRect.setFillColor(sf::Color(50, 50, 50));
@@ -80,6 +83,86 @@ public:
             case '7' + 10:
                 blockRects[i].setFillColor(sf::Color(255, 51, 255, 25));
                 break;
+            }
+        }
+
+        // Find occupied height
+        for(int i = 0; i < WELL_HEIGHT; i++)
+        {
+            bool flag = false;
+            for(int j = 0; j < WELL_WIDTH; j++)
+            {
+                if(newWell[i][j] != '0' && newWell[i][j])
+                {
+                    occupiedHeight = WELL_HEIGHT - i;
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag)
+            {
+                break;
+            }
+        }
+
+        // Find lines to clear
+        std::vector<int> linesToClear;
+        for(int i = WELL_HEIGHT - occupiedHeight; i < WELL_HEIGHT; i++)
+        {
+            bool flag = true;
+            for(int j = 0; j < WELL_WIDTH; j++)
+            {
+                if(newWell[i][j] == '0')
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)
+            {
+                linesToClear.push_back(i);
+            }
+        }
+
+        //  Clear lines
+        for(int line : linesToClear)
+        {
+            for(int x = 0; x < WELL_WIDTH; x++)
+            {
+                newWell[line][x] = '0';
+            }
+        }
+
+        // Find lines to adjust
+        std::stack<int> linesToAdjust;
+        for(int i = WELL_HEIGHT - occupiedHeight; i < WELL_HEIGHT; i++)
+        {
+            bool flag = true;
+            for(int j = 0; j < WELL_WIDTH; j++)
+            {
+                if(newWell[i][j] != '0')
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)
+            {
+                linesToAdjust.push(i);
+            }
+        }
+
+        // Adjust lines
+        if(!linesToAdjust.empty())
+        {
+            int line = linesToAdjust.top();
+            linesToAdjust.pop();
+            for(int i = line; i > 0; i--)
+            {
+                for(int j = 0; j < WELL_WIDTH; j++)
+                {
+                    newWell[i][j] = newWell[i - 1][j];
+                }
             }
         }
         well = newWell;
@@ -233,6 +316,8 @@ private:
     std::vector<sf::RectangleShape> blockRects;
     sf::RectangleShape wellRect;
     sf::Vector2f pos;
+
+    unsigned int occupiedHeight;
 
     Tetromino currentPiece;
     Tetromino previewPiece;

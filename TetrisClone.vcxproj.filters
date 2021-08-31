@@ -4,6 +4,7 @@
     <ClInclude Include="Tetromino.h" />
     <ClInclude Include="Well.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="PieceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

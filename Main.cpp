@@ -1,11 +1,15 @@
 #include <SFML/Graphics.hpp>
-#include "Well.h"
-#include "KeyManager.h"
 #include <cstdlib>
 #include <time.h>
 
+#include "Well.h"
+#include "KeyManager.h"
+#include "PieceManager.h"
+
+
 int main()
 {
+
     srand((unsigned int) time(0));
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
@@ -13,7 +17,8 @@ int main()
     KeyManager keyManager;
 
     Well well(sf::Vector2f(50, 50));
-    Tetromino currentPiece(rand() % 7 + 1);
+    PieceManager pieceMan;
+    Tetromino currentPiece(pieceMan.getNext());
 
     while(window.isOpen())
     {
@@ -87,12 +92,12 @@ int main()
         }
         if(keyManager.isPressed(sf::Keyboard::LShift))
         {
-            currentPiece.setType((currentPiece.getType() + 1) % 7 + 1);
+            pieceMan.swap(currentPiece);
         }
         if(keyManager.isPressed(sf::Keyboard::Space))
         {
             well.dropCurrentPiece();
-            currentPiece = Tetromino(rand() % 7 + 1);
+            currentPiece = Tetromino(pieceMan.getNext());
         }
 
         // UPDATE

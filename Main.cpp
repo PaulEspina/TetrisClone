@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <time.h>
+#include <iostream>
 
 #include "Well.h"
 #include "KeyManager.h"
@@ -9,7 +10,6 @@
 
 int main()
 {
-
     srand((unsigned int) time(0));
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
@@ -24,7 +24,7 @@ int main()
     {
         // TICK
         sf::Event event;
-        keyManager.init();
+        keyManager.prepare();
         while(window.pollEvent(event))
         {
             if(event.type == sf::Event::Closed)
@@ -99,13 +99,26 @@ int main()
             well.dropCurrentPiece();
             currentPiece = Tetromino(pieceMan.getNext());
         }
+        if(keyManager.isPressed(sf::Keyboard::R))
+        {
+            well.init();
+            pieceMan.init();
+            currentPiece = Tetromino(pieceMan.getNext());
+            clock.restart();
+        }
 
         // UPDATE
 
         if(clock.getElapsedTime().asSeconds() > 1)
         {
             clock.restart();
-            //currentPiece.move(sf::Vector2i(0, 1));
+            currentPiece.move(sf::Vector2i(0, 1));
+            if(!well.inBounds(currentPiece))
+            {
+                currentPiece.move(sf::Vector2i(0, -1));
+                well.dropCurrentPiece();
+                currentPiece = Tetromino(pieceMan.getNext());
+            }
         }
 
         if(!well.inBounds(currentPiece))

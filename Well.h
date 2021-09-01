@@ -10,26 +10,39 @@ class Well
 public:
     Well(sf::Vector2f pos = sf::Vector2f(0,0))
     {
-        occupiedHeight = 0;
         this->pos = pos;
         wellRect.setPosition(pos + sf::Vector2f(0, EXTRA_BLOCK * BLOCK_SIZE));
         wellRect.setFillColor(sf::Color(50, 50, 50));
         wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE - EXTRA_BLOCK * BLOCK_SIZE));
         for(unsigned int i = 0; i < WELL_HEIGHT; i++)
         {
-            std::vector<char> row;
             for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
-                row.push_back('0');
                 sf::RectangleShape rs(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
                 rs.setPosition(sf::Vector2f(j * BLOCK_SIZE, i * BLOCK_SIZE) + pos);
                 rs.setOutlineColor(sf::Color::Black);
                 rs.setOutlineThickness(1);
                 blockRects.push_back(rs);
             }
+        }
+        init();
+    }
+
+    void init()
+    {
+        well.clear();
+        newWell.clear();
+        for(unsigned int i = 0; i < WELL_HEIGHT; i++)
+        {
+            std::vector<char> row;
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
+            {
+                row.push_back('0');
+            }
             well.push_back(row);
         }
         newWell = well;
+        occupiedHeight = 0;
     }
 
     void update()
@@ -286,6 +299,26 @@ public:
             intervalY = 0;
             while(intervalY < WELL_HEIGHT)
             {
+                tetromino.move(sf::Vector2i(intervalX, intervalY));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(-intervalX, -intervalY));
+                }
+                tetromino.move(sf::Vector2i(-intervalX, intervalY));
+                if(inBounds(tetromino))
+                {
+                    success = true;
+                    break;
+                }
+                else
+                {
+                    tetromino.move(sf::Vector2i(intervalX, -intervalY));
+                }
                 tetromino.move(sf::Vector2i(intervalX, -intervalY));
                 if(inBounds(tetromino))
                 {

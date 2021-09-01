@@ -13,7 +13,7 @@ public:
 		reset();
 	}
 
-	void init()
+	void prepare()
 	{
 		for(int i = 0; i < sf::Keyboard::KeyCount; i++)
 		{

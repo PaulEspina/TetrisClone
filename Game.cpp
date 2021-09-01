@@ -54,9 +54,7 @@ void Game::tick(KeyManager &keyManager)
     {
         if(atBottom)
         {
-            atBottom = false;
-            well.dropCurrentPiece();
-            currentPiece = Tetromino(pieceMan.next());
+            dropPiece();
         }
         else
         {
@@ -83,9 +81,7 @@ void Game::tick(KeyManager &keyManager)
     }
     if(keyManager.isPressed(sf::Keyboard::Space))
     {
-        atBottom = false;
-        well.dropCurrentPiece();
-        currentPiece = Tetromino(pieceMan.next());
+        dropPiece();
     }
     if(keyManager.isPressed(sf::Keyboard::R))
     {
@@ -114,10 +110,7 @@ void Game::update()
 
     if(atBottom && dropTimer.getElapsedTime().asSeconds() > 2)
     {
-        well.dropCurrentPiece();
-        currentPiece = Tetromino(pieceMan.next());
-        atBottom = false;
-        dropTimer.restart();
+        dropPiece();
     }
 
     if(!well.inBounds(currentPiece))
@@ -136,4 +129,12 @@ void Game::render(sf::RenderWindow &window)
     well.render(&window);
 
     window.display();
+}
+
+void Game::dropPiece()
+{
+    well.dropCurrentPiece();
+    currentPiece = Tetromino(pieceMan.next());
+    atBottom = false;
+    dropTimer.restart();
 }

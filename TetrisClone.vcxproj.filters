@@ -5,6 +5,7 @@
     <ClInclude Include="Well.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="PieceManager.h" />
+    <ClInclude Include="Game.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -12,5 +13,6 @@
     <ClCompile Include="PieceManager.cpp" />
     <ClCompile Include="Well.cpp" />
     <ClCompile Include="Tetromino.cpp" />
+    <ClCompile Include="Game.cpp" />
   </ItemGroup>
 </Project>

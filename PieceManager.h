@@ -14,6 +14,13 @@ public:
 	PieceManager()
 	{
 		srand((unsigned int) time(0));
+		init();
+	}
+
+	void init()
+	{
+		bag.clear();
+		history.clear();
 		hold = 0;
 		std::vector<int> tetrominos = {1, 2, 3, 4, 5, 6, 7};
 		std::shuffle(tetrominos.begin(), tetrominos.end(), std::default_random_engine((unsigned int) time(0)));

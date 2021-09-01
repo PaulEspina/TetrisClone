@@ -25,7 +25,11 @@
     <ClInclude Include="Well.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PieceManager.cpp" />
+    <ClCompile Include="Tetromino.cpp" />
+    <ClCompile Include="Well.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

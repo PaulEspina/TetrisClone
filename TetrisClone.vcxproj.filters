@@ -8,5 +8,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="PieceManager.cpp" />
+    <ClCompile Include="Well.cpp" />
+    <ClCompile Include="Tetromino.cpp" />
   </ItemGroup>
 </Project>

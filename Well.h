@@ -8,13 +8,19 @@
 class Well
 {
 public:
-    Well(sf::Vector2f pos = sf::Vector2f(0,0))
+    Well(sf::Vector2f pos = sf::Vector2f(0, 0), sf::Vector2u dimension = sf::Vector2u(10, 20), unsigned int extraBlocks = 3, unsigned int blockSize = 25)
+        :
+        WELL_WIDTH(dimension.x),
+        WELL_HEIGHT(dimension.y),
+        TRUE_WELL_HEIGHT(dimension.y + extraBlocks),
+        EXTRA_BLOCK(extraBlocks),
+        BLOCK_SIZE(blockSize)
     {
         this->pos = pos;
         wellRect.setPosition(pos + sf::Vector2f(0, EXTRA_BLOCK * BLOCK_SIZE));
         wellRect.setFillColor(sf::Color(50, 50, 50));
-        wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE - EXTRA_BLOCK * BLOCK_SIZE));
-        for(unsigned int i = 0; i < WELL_HEIGHT; i++)
+        wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE));
+        for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
         {
             for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
@@ -32,7 +38,7 @@ public:
     {
         well.clear();
         newWell.clear();
-        for(unsigned int i = 0; i < WELL_HEIGHT; i++)
+        for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
         {
             std::vector<char> row;
             for(unsigned int j = 0; j < WELL_WIDTH; j++)
@@ -47,7 +53,7 @@ public:
 
     void update()
     {
-        for(int i = 0; i < WELL_WIDTH * WELL_HEIGHT; i++)
+        for(unsigned int i = 0; i < WELL_WIDTH * TRUE_WELL_HEIGHT; i++)
         {
             switch(well[i / WELL_WIDTH][i % WELL_WIDTH])
             {
@@ -100,14 +106,14 @@ public:
         }
 
         // Find occupied height
-        for(int i = 0; i < WELL_HEIGHT; i++)
+        for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
         {
             bool flag = false;
-            for(int j = 0; j < WELL_WIDTH; j++)
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
                 if(newWell[i][j] != '0' && newWell[i][j])
                 {
-                    occupiedHeight = WELL_HEIGHT - i;
+                    occupiedHeight = TRUE_WELL_HEIGHT - i;
                     flag = true;
                     break;
                 }
@@ -119,11 +125,11 @@ public:
         }
 
         // Find lines to clear
-        std::vector<int> linesToClear;
-        for(int i = WELL_HEIGHT - occupiedHeight; i < WELL_HEIGHT; i++)
+        std::vector<unsigned int> linesToClear;
+        for(unsigned int i = TRUE_WELL_HEIGHT - occupiedHeight; i < TRUE_WELL_HEIGHT; i++)
         {
             bool flag = true;
-            for(int j = 0; j < WELL_WIDTH; j++)
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
                 if(newWell[i][j] == '0')
                 {
@@ -138,20 +144,20 @@ public:
         }
 
         //  Clear lines
-        for(int line : linesToClear)
+        for(unsigned int line : linesToClear)
         {
-            for(int x = 0; x < WELL_WIDTH; x++)
+            for(unsigned int x = 0; x < WELL_WIDTH; x++)
             {
                 newWell[line][x] = '0';
             }
         }
 
         // Find lines to adjust
-        std::stack<int> linesToAdjust;
-        for(int i = WELL_HEIGHT - occupiedHeight; i < WELL_HEIGHT; i++)
+        std::stack<unsigned int> linesToAdjust;
+        for(unsigned int i = TRUE_WELL_HEIGHT - occupiedHeight; i < TRUE_WELL_HEIGHT; i++)
         {
             bool flag = true;
-            for(int j = 0; j < WELL_WIDTH; j++)
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
                 if(newWell[i][j] != '0')
                 {
@@ -168,11 +174,11 @@ public:
         // Adjust lines
         if(!linesToAdjust.empty())
         {
-            int line = linesToAdjust.top();
+            unsigned int line = linesToAdjust.top();
             linesToAdjust.pop();
-            for(int i = line; i > 0; i--)
+            for(unsigned int i = line; i > 0; i--)
             {
-                for(int j = 0; j < WELL_WIDTH; j++)
+                for(unsigned int j = 0; j < WELL_WIDTH; j++)
                 {
                     newWell[i][j] = newWell[i - 1][j];
                 }
@@ -188,9 +194,9 @@ public:
         {
             window->draw(wellRect);
         }*/
-        for(int i = 0; i < WELL_HEIGHT; i++)
+        for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
         {
-            for(int j = 0; j < WELL_WIDTH; j++)
+            for(unsigned int j = 0; j < WELL_WIDTH; j++)
             {
                 if((i < EXTRA_BLOCK && blockRects[i * WELL_WIDTH + j].getFillColor() != sf::Color(50, 50, 50)) || i >= EXTRA_BLOCK)
                 {
@@ -275,7 +281,7 @@ public:
                 unsigned int y = gridPos.y + i;
                 if(shape[i][j] != '0')
                 {
-                    if((y < 0 || x < 0 || y >= WELL_HEIGHT || x >= WELL_WIDTH))
+                    if((y < 0 || x < 0 || y >= TRUE_WELL_HEIGHT || x >= WELL_WIDTH))
                     {
                         return false;
                     }
@@ -294,10 +300,10 @@ public:
         int intervalX = 0;
         int intervalY = 0;
         bool success = false;
-        while(!success && intervalX < WELL_WIDTH)
+        while(!success && (unsigned int) intervalX < WELL_WIDTH)
         {
             intervalY = 0;
-            while(intervalY < WELL_HEIGHT)
+            while((unsigned int) intervalY < TRUE_WELL_HEIGHT)
             {
                 tetromino.move(sf::Vector2i(intervalX, intervalY));
                 if(inBounds(tetromino))
@@ -350,10 +356,11 @@ public:
     }
 
 private:
-    static const int BLOCK_SIZE = 25;
-    static const int EXTRA_BLOCK = 3;
-    static const int WELL_WIDTH = 10;
-    static const int WELL_HEIGHT = 20 + EXTRA_BLOCK;
+    const unsigned int EXTRA_BLOCK;
+    const unsigned int WELL_WIDTH;
+    const unsigned int WELL_HEIGHT;
+    const unsigned int TRUE_WELL_HEIGHT;
+    const unsigned int BLOCK_SIZE;
 
     std::vector<std::vector<char>> well;
     std::vector<std::vector<char>> newWell;

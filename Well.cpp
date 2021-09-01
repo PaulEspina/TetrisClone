@@ -1,23 +1,33 @@
 #include "Well.h"
 
+Well::Well()
+{
+    pos = sf::Vector2f(0, 0);
+    wellWidth = 0;
+    wellHeight = 0;
+    this->extraBlocks = 0;
+    trueWellHeight = 0;
+    blockSize = 0;
+    occupiedHeight = 0;
+}
+
 Well::Well(sf::Vector2f pos, sf::Vector2u dimension, unsigned int extraBlocks, unsigned int blockSize)
-    :
-    WELL_WIDTH(dimension.x),
-    WELL_HEIGHT(dimension.y),
-    TRUE_WELL_HEIGHT(dimension.y + extraBlocks),
-    EXTRA_BLOCK(extraBlocks),
-    BLOCK_SIZE(blockSize)
 {
     this->pos = pos;
-    wellRect.setPosition(pos + sf::Vector2f(0, EXTRA_BLOCK * BLOCK_SIZE));
+    wellWidth = dimension.x;
+    wellHeight = dimension.y;
+    this->extraBlocks = extraBlocks;
+    trueWellHeight = dimension.y + extraBlocks;
+    this->blockSize = blockSize;
+    wellRect.setPosition(pos + sf::Vector2f(0, extraBlocks * blockSize));
     wellRect.setFillColor(sf::Color(50, 50, 50));
-    wellRect.setSize(sf::Vector2f(WELL_WIDTH * BLOCK_SIZE, WELL_HEIGHT * BLOCK_SIZE));
-    for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
+    wellRect.setSize(sf::Vector2f(wellWidth * blockSize, wellHeight * blockSize));
+    for(unsigned int i = 0; i < trueWellHeight; i++)
     {
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
-            sf::RectangleShape rs(sf::Vector2f(BLOCK_SIZE, BLOCK_SIZE));
-            rs.setPosition(sf::Vector2f(j * BLOCK_SIZE, i * BLOCK_SIZE) + pos);
+            sf::RectangleShape rs(sf::Vector2f(blockSize, blockSize));
+            rs.setPosition(sf::Vector2f(j * blockSize, i * blockSize) + pos);
             rs.setOutlineColor(sf::Color::Black);
             rs.setOutlineThickness(1);
             blockRects.push_back(rs);
@@ -30,10 +40,10 @@ void Well::init()
 {
     well.clear();
     newWell.clear();
-    for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = 0; i < trueWellHeight; i++)
     {
         std::vector<char> row;
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
             row.push_back('0');
         }
@@ -45,9 +55,9 @@ void Well::init()
 
 void Well::update()
 {
-    for(unsigned int i = 0; i < WELL_WIDTH * TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = 0; i < wellWidth * trueWellHeight; i++)
     {
-        switch(well[i / WELL_WIDTH][i % WELL_WIDTH])
+        switch(well[i / wellWidth][i % wellWidth])
         {
         case '0':
             blockRects[i].setFillColor(sf::Color(50, 50, 50));
@@ -98,14 +108,14 @@ void Well::update()
     }
 
     // Find occupied height
-    for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = 0; i < trueWellHeight; i++)
     {
         bool flag = false;
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
             if(newWell[i][j] != '0' && newWell[i][j])
             {
-                occupiedHeight = TRUE_WELL_HEIGHT - i;
+                occupiedHeight = trueWellHeight - i;
                 flag = true;
                 break;
             }
@@ -118,10 +128,10 @@ void Well::update()
 
     // Find lines to clear
     std::vector<unsigned int> linesToClear;
-    for(unsigned int i = TRUE_WELL_HEIGHT - occupiedHeight; i < TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = trueWellHeight - occupiedHeight; i < trueWellHeight; i++)
     {
         bool flag = true;
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
             if(newWell[i][j] == '0')
             {
@@ -138,7 +148,7 @@ void Well::update()
     //  Clear lines
     for(unsigned int line : linesToClear)
     {
-        for(unsigned int x = 0; x < WELL_WIDTH; x++)
+        for(unsigned int x = 0; x < wellWidth; x++)
         {
             newWell[line][x] = '0';
         }
@@ -146,10 +156,10 @@ void Well::update()
 
     // Find lines to adjust
     std::stack<unsigned int> linesToAdjust;
-    for(unsigned int i = TRUE_WELL_HEIGHT - occupiedHeight; i < TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = trueWellHeight - occupiedHeight; i < trueWellHeight; i++)
     {
         bool flag = true;
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
             if(newWell[i][j] != '0')
             {
@@ -170,7 +180,7 @@ void Well::update()
         linesToAdjust.pop();
         for(unsigned int i = line; i > 0; i--)
         {
-            for(unsigned int j = 0; j < WELL_WIDTH; j++)
+            for(unsigned int j = 0; j < wellWidth; j++)
             {
                 newWell[i][j] = newWell[i - 1][j];
             }
@@ -182,13 +192,13 @@ void Well::update()
 void Well::render(sf::RenderWindow *window)
 {
     window->draw(wellRect);
-    for(unsigned int i = 0; i < TRUE_WELL_HEIGHT; i++)
+    for(unsigned int i = 0; i < trueWellHeight; i++)
     {
-        for(unsigned int j = 0; j < WELL_WIDTH; j++)
+        for(unsigned int j = 0; j < wellWidth; j++)
         {
-            if((i < EXTRA_BLOCK && blockRects[i * WELL_WIDTH + j].getFillColor() != sf::Color(50, 50, 50)) || i >= EXTRA_BLOCK)
+            if((i < extraBlocks && blockRects[i * wellWidth + j].getFillColor() != sf::Color(50, 50, 50)) || i >= extraBlocks)
             {
-                window->draw(blockRects[i * WELL_WIDTH + j]);
+                window->draw(blockRects[i * wellWidth + j]);
             }
         }
     }
@@ -269,7 +279,7 @@ bool Well::inBounds(Tetromino tetromino)
             unsigned int y = gridPos.y + i;
             if(shape[i][j] != '0')
             {
-                if((y < 0 || x < 0 || y >= TRUE_WELL_HEIGHT || x >= WELL_WIDTH))
+                if((y < 0 || x < 0 || y >= trueWellHeight || x >= wellWidth))
                 {
                     return false;
                 }
@@ -288,10 +298,10 @@ void Well::findValidGrid(Tetromino &tetromino)
     int intervalX = 0;
     int intervalY = 0;
     bool success = false;
-    while(!success && (unsigned int) intervalX < WELL_WIDTH)
+    while(!success && (unsigned int) intervalX < wellWidth)
     {
         intervalY = 0;
-        while((unsigned int) intervalY < TRUE_WELL_HEIGHT)
+        while((unsigned int) intervalY < trueWellHeight)
         {
             tetromino.move(sf::Vector2i(intervalX, intervalY));
             if(inBounds(tetromino))

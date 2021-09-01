@@ -1,28 +1,16 @@
 #include <SFML/Graphics.hpp>
-#include <cstdlib>
-#include <time.h>
-#include <iostream>
 
-#include "Well.h"
-#include "KeyManager.h"
-#include "PieceManager.h"
-
+#include "Game.h"
 
 int main()
 {
-    srand((unsigned int) time(0));
+    Game game;
+    KeyManager keyManager;
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
-    sf::Clock clock;
-    KeyManager keyManager;
-
-    Well well(sf::Vector2f(50, 50));
-    PieceManager pieceMan;
-    Tetromino currentPiece(pieceMan.getNext());
 
     while(window.isOpen())
     {
-        // TICK
         sf::Event event;
         keyManager.prepare();
         while(window.pollEvent(event))
@@ -33,110 +21,9 @@ int main()
             }
             keyManager.update(event);
         }
-
-        /*if(keyManager.isDown(sf::Keyboard::Left))
-        {
-            currentPiece.move(sf::Vector2i(-1, 0));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(1, 0));
-            }
-        }
-        if(keyManager.isDown(sf::Keyboard::Right))
-        {
-            currentPiece.move(sf::Vector2i(1, 0));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(-1, 0));
-            }
-        }
-        if(keyManager.isDown(sf::Keyboard::Down))
-        {
-            currentPiece.move(sf::Vector2i(0, 1));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(0, -1));
-            }
-        }*/
-        if(keyManager.isPressed(sf::Keyboard::Left))
-        {
-            currentPiece.move(sf::Vector2i(-1, 0));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(1, 0));
-            }
-        }
-        if(keyManager.isPressed(sf::Keyboard::Right))
-        {
-            currentPiece.move(sf::Vector2i(1, 0));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(-1, 0));
-            }
-        }
-        if(keyManager.isPressed(sf::Keyboard::Down))
-        {
-            currentPiece.move(sf::Vector2i(0, 1));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(0, -1));
-            }
-        }
-        if(keyManager.isPressed(sf::Keyboard::LControl))
-        {
-            currentPiece.rotateCounterClockwise();
-        }
-        if(keyManager.isPressed(sf::Keyboard::Up))
-        {
-            currentPiece.rotateClockwise();
-        }
-        if(keyManager.isPressed(sf::Keyboard::LShift))
-        {
-            pieceMan.swap(currentPiece);
-        }
-        if(keyManager.isPressed(sf::Keyboard::Space))
-        {
-            well.dropCurrentPiece();
-            currentPiece = Tetromino(pieceMan.getNext());
-        }
-        if(keyManager.isPressed(sf::Keyboard::R))
-        {
-            well.init();
-            pieceMan.init();
-            currentPiece = Tetromino(pieceMan.getNext());
-            clock.restart();
-        }
-
-        // UPDATE
-
-        if(clock.getElapsedTime().asSeconds() > 1)
-        {
-            clock.restart();
-            currentPiece.move(sf::Vector2i(0, 1));
-            if(!well.inBounds(currentPiece))
-            {
-                currentPiece.move(sf::Vector2i(0, -1));
-                well.dropCurrentPiece();
-                currentPiece = Tetromino(pieceMan.getNext());
-            }
-        }
-
-        if(!well.inBounds(currentPiece))
-        {
-            well.findValidGrid(currentPiece);
-        }
-        well.previewDrop(currentPiece);
-        well.showCurrentPiece(currentPiece);
-        well.update();
-
-
-        //DRAW
-
-        window.clear();
-
-        well.render(&window);
-
-        window.display();
+        game.tick(keyManager);
+        game.update();
+        game.render(window);
     }
 
     return 0;

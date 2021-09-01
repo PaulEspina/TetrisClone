@@ -8,7 +8,8 @@
 class Well
 {
 public:
-    Well(sf::Vector2f pos = sf::Vector2f(0, 0), sf::Vector2u dimension = sf::Vector2u(10, 20), unsigned int extraBlocks = 3, unsigned int blockSize = 25);
+    Well();
+    Well(sf::Vector2f pos, sf::Vector2u dimension = sf::Vector2u(10, 20), unsigned int extraBlocks = 3, unsigned int blockSize = 25);
 
     void init();
     void update();
@@ -21,11 +22,11 @@ public:
     void findValidGrid(Tetromino &tetromino);
 
 private:
-    const unsigned int EXTRA_BLOCK;
-    const unsigned int WELL_WIDTH;
-    const unsigned int WELL_HEIGHT;
-    const unsigned int TRUE_WELL_HEIGHT;
-    const unsigned int BLOCK_SIZE;
+    unsigned int extraBlocks;
+    unsigned int wellWidth;
+    unsigned int wellHeight;
+    unsigned int trueWellHeight;
+    unsigned int blockSize;
 
     std::vector<std::vector<char>> well;
     std::vector<std::vector<char>> newWell;

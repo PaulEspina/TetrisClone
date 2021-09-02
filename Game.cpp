@@ -4,7 +4,6 @@ Game::Game()
 {
     srand((unsigned int) time(0));
     currentPiece = Tetromino(pieceMan.next());
-    atBottom = false;
     well = Well(sf::Vector2f(50, 50));
 }
 
@@ -52,7 +51,7 @@ void Game::tick(KeyManager &keyManager)
     }
     if(keyManager.isPressed(sf::Keyboard::Down))
     {
-        if(atBottom)
+        if(currentPiece.isAtBottom())
         {
             dropPiece();
         }
@@ -61,7 +60,7 @@ void Game::tick(KeyManager &keyManager)
             currentPiece.move(sf::Vector2i(0, 1));
             if(!well.inBounds(currentPiece))
             {
-                atBottom = true;
+                currentPiece.setAtBottom(true);
                 currentPiece.move(sf::Vector2i(0, -1));
             }
             dropTimer.restart();
@@ -94,13 +93,13 @@ void Game::tick(KeyManager &keyManager)
 
 void Game::update()
 {
-    if(!atBottom && dropTimer.getElapsedTime().asSeconds() > 0.5)
+    if(!currentPiece.isAtBottom() && dropTimer.getElapsedTime().asSeconds() > 0.5)
     {
         currentPiece.move(sf::Vector2i(0, 1));
         if(!well.inBounds(currentPiece))
         {
             currentPiece.move(sf::Vector2i(0, -1));
-            atBottom = true;
+            currentPiece.setAtBottom(true);
         }
         else
         {
@@ -108,7 +107,7 @@ void Game::update()
         }
     }
 
-    if(atBottom && dropTimer.getElapsedTime().asSeconds() > 2)
+    if(currentPiece.isAtBottom() && dropTimer.getElapsedTime().asSeconds() > 2)
     {
         dropPiece();
     }
@@ -135,6 +134,5 @@ void Game::dropPiece()
 {
     well.dropCurrentPiece();
     currentPiece = Tetromino(pieceMan.next());
-    atBottom = false;
     dropTimer.restart();
 }

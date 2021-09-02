@@ -12,6 +12,7 @@ class Game
 {
 public:
 	Game();
+
 	void tick(KeyManager &keyManager);
 	void update();
 	void render(sf::RenderWindow &window);
@@ -20,7 +21,6 @@ private:
 	PieceManager pieceMan;
 	Well well;
 	Tetromino currentPiece;
-	bool atBottom;
 
 	void dropPiece();
 };

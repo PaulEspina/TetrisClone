@@ -19,9 +19,11 @@ public:
     std::vector<std::vector<char>> getShape();
     void setGridPos(sf::Vector2i gridPos);
     sf::Vector2i getGridPos();
-
+    bool isAtBottom();
+    void setAtBottom(bool value);
 private:
     std::vector<std::vector<char>> shape;
     unsigned int type;
     sf::Vector2i gridPos;
+    bool atBottom;
 };

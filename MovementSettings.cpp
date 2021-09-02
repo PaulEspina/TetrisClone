@@ -87,12 +87,14 @@ bool MovementSettings::shouldDAS()
 
 bool MovementSettings::shouldMove()
 {
-	return moveTimer.getElapsedTime().asSeconds() > moveSpeed ? true : false;
+	float delay = 1.0f / (float) moveSpeed;
+	return moveTimer.getElapsedTime().asSeconds() > delay ? true : false;
 }
 
 bool MovementSettings::shouldSoftDrop()
 {
-	return softDropTimer.getElapsedTime().asSeconds() > softDropSpeed ? true : false;
+	float delay = 1.0f / (float) softDropSpeed;
+	return softDropTimer.getElapsedTime().asSeconds() > delay ? true : false;
 }
 
 float MovementSettings::getLockDelay()

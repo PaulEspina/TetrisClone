@@ -4,10 +4,12 @@
 
 int main()
 {
-    Game game;
-    KeyManager keyManager;
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
+    
+    MovementSettings movSettings(2.0f, 0.5f, 0.2f, 20, 20);
+    Game game(movSettings);
+    KeyManager keyManager;
 
     while(window.isOpen())
     {

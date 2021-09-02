@@ -5,6 +5,7 @@ Tetromino::Tetromino()
     gridPos = sf::Vector2i(0, 0);
     type = 0;
     atBottom = false;
+    dropLock = false;
 }
 
 Tetromino::Tetromino(unsigned int type)
@@ -20,6 +21,7 @@ Tetromino::Tetromino(unsigned int type)
     this->type = type;
     setType(type);
     atBottom = false;
+    dropLock = false;
 }
 
 Tetromino::Tetromino(sf::Vector2i gridPos, unsigned int type)
@@ -28,6 +30,7 @@ Tetromino::Tetromino(sf::Vector2i gridPos, unsigned int type)
     this->type = type;
     setType(type);
     atBottom = false;
+    dropLock = false;
 }
 
 void Tetromino::rotateClockwise()
@@ -159,4 +162,14 @@ bool Tetromino::isAtBottom()
 void Tetromino::setAtBottom(bool value)
 {
     atBottom = value;
+}
+
+bool Tetromino::shouldLock()
+{
+    return dropLock;
+}
+
+void Tetromino::setDropLock(bool value)
+{
+    dropLock = value;
 }

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bag.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="MovementSettings.h" />
@@ -27,6 +28,7 @@
     <ClInclude Include="Well.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bag.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Main.cpp" />

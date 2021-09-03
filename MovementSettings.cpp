@@ -25,11 +25,11 @@ MovementSettings::MovementSettings(float lockDelay, float fallDelay, float das, 
 void MovementSettings::init()
 {
 	lockTimerRunning = false;
-	lockTimer.restart();
-	fallTimer.restart();
-	dasTimer.restart();
-	moveTimer.restart();
-	softDropTimer.restart();
+	restartLockTimer();
+	restartFallTimer();
+	restartDASTimer();
+	restartMoveTimer();
+	restartSoftDropTimer();
 }
 
 void MovementSettings::runLockTimer()

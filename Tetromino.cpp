@@ -139,7 +139,7 @@ unsigned int Tetromino::getType()
     return type;
 }
 
-std::vector<std::vector<char>> Tetromino::getShape()
+const std::vector<std::vector<char>> Tetromino::getShape()
 {
     return shape;
 }

@@ -189,16 +189,16 @@ void Well::update()
     well = newWell;
 }
 
-void Well::render(sf::RenderWindow *window)
+void Well::render(sf::RenderWindow &window)
 {
-    window->draw(wellRect);
+    window.draw(wellRect);
     for(unsigned int i = 0; i < trueWellHeight; i++)
     {
         for(unsigned int j = 0; j < wellWidth; j++)
         {
             if((i < extraBlocks && blockRects[i * wellWidth + j].getFillColor() != sf::Color(50, 50, 50)) || i >= extraBlocks)
             {
-                window->draw(blockRects[i * wellWidth + j]);
+                window.draw(blockRects[i * wellWidth + j]);
             }
         }
     }

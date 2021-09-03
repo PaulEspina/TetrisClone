@@ -13,7 +13,6 @@ public:
 	bool isDown(int key);
 	bool isPressed(int key);
 	bool isReleased(int key);
-
 private:
 	int *keyDown;
 	int *keyPressed;

@@ -17,7 +17,7 @@ public:
 
     void setType(int type);
     unsigned int getType();
-    std::vector<std::vector<char>> getShape();
+    const std::vector<std::vector<char>> getShape();
     void setGridPos(sf::Vector2i gridPos);
     sf::Vector2i getGridPos();
     bool isAtBottom();

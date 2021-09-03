@@ -16,6 +16,7 @@ public:
 	void init();
 	int next();
 	void swap(Tetromino &tetromino);
+
 	const std::deque<int> getBag();
 	const std::deque<int> getHistory();
 

@@ -13,7 +13,7 @@ public:
 
     void init();
     void update();
-    void render(sf::RenderWindow *window);
+    void render(sf::RenderWindow &window);
     void showCurrentPiece(Tetromino tetromino);
     void previewDrop(Tetromino tetromino);
     void placePiece(Tetromino tetromino);
@@ -33,9 +33,7 @@ private:
     std::vector<sf::RectangleShape> blockRects;
     sf::RectangleShape wellRect;
     sf::Vector2f pos;
-
     unsigned int occupiedHeight;
-
     Tetromino currentPiece;
     Tetromino previewPiece;
 };

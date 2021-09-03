@@ -54,6 +54,7 @@ void Game::tick(KeyManager &keyManager)
         moveLeft(currentPiece, well);
         movSettings->restartMoveTimer();
         movSettings->restartDASTimer();
+        currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Left))
     {
@@ -62,12 +63,21 @@ void Game::tick(KeyManager &keyManager)
             moveLeft(currentPiece, well);
             movSettings->restartMoveTimer();
         }
+        if(currentPiece.isAtBottom())
+        {
+            movSettings->restartFallTimer();
+        }
+    }
+    if(keyManager.isReleased(sf::Keyboard::Right))
+    {
+        currentPiece.setDropLock(false);
     }
     if(keyManager.isPressed(sf::Keyboard::Right))
     {
         moveRight(currentPiece, well);
         movSettings->restartMoveTimer();
         movSettings->restartDASTimer();
+        currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Right))
     {
@@ -76,6 +86,14 @@ void Game::tick(KeyManager &keyManager)
             moveRight(currentPiece, well);
             movSettings->restartMoveTimer();
         }
+        if(currentPiece.isAtBottom())
+        {
+            movSettings->restartFallTimer();
+        }
+    }
+    if(keyManager.isReleased(sf::Keyboard::Right))
+    {
+        currentPiece.setDropLock(false);
     }
     if(keyManager.isPressed(sf::Keyboard::Down))
     {
@@ -83,15 +101,12 @@ void Game::tick(KeyManager &keyManager)
     }
     if(keyManager.isDown(sf::Keyboard::Down))
     {
-        if(!currentPiece.isAtBottom())
+        if(movSettings->shouldSoftDrop())
         {
-            if(movSettings->shouldSoftDrop())
-            {
-                moveDown(currentPiece, well);
-                movSettings->restartSoftDropTimer();
-            }
-            movSettings->restartFallTimer();
+            moveDown(currentPiece, well);
+            movSettings->restartSoftDropTimer();
         }
+        movSettings->restartFallTimer();
     }
     if(keyManager.isReleased(sf::Keyboard::Down))
     {
@@ -100,20 +115,14 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::LControl))
     {
         currentPiece.rotateCounterClockwise();
-        if(!currentPiece.isAtBottom() && movSettings->shouldSoftDrop())
-        {
-            movSettings->restartSoftDropTimer();
-        }
         movSettings->restartFallTimer();
+        movSettings->setLockTimerRunning(true);
     }
     if(keyManager.isPressed(sf::Keyboard::Up))
     {
         currentPiece.rotateClockwise();
-        if(!currentPiece.isAtBottom() && movSettings->shouldSoftDrop())
-        {
-            movSettings->restartSoftDropTimer();
-        }
         movSettings->restartFallTimer();
+        movSettings->setLockTimerRunning(true);
     }
     if(keyManager.isPressed(sf::Keyboard::LShift))
     {
@@ -139,40 +148,48 @@ void Game::update()
 {
     holdBox.update();
     bag.update();
-    if(!currentPiece.isAtBottom() && movSettings->shouldFall())
+
+    currentPiece.move(sf::Vector2i(0, 1));
+    if(!well.inBounds(currentPiece))
+    {
+        currentPiece.setAtBottom(true);
+    }
+    else
+    {
+        currentPiece.setAtBottom(false);
+    }
+    currentPiece.move(sf::Vector2i(0, -1));
+
+    if(movSettings->shouldFall() && !currentPiece.isAtBottom())
     {
         currentPiece.move(sf::Vector2i(0, 1));
-        if(!well.inBounds(currentPiece))
-        {
-            currentPiece.setAtBottom(true);
-            currentPiece.move(sf::Vector2i(0, -1));
-        }
-        else
-        {
-            movSettings->restartFallTimer();
-        }
+        movSettings->restartFallTimer();
     }
 
     if(currentPiece.isAtBottom())
     {
-        if(movSettings->shouldLock() || (!currentPiece.shouldLock() && movSettings->shouldFall()))
+        if(movSettings->shouldLock())
         {
             dropPiece();
-            movSettings->restartLockTimer();
+            movSettings->restartLockDelay();
         }
         else
         {
             if(movSettings->isLockTimerRunning())
             {
-                movSettings->stopLockTimer();
+                movSettings->updateLockTimer();
             }
-            movSettings->runLockTimer();
+            else
+            {
+                movSettings->setLockTimerRunning(true);
+                movSettings->restartLockDelay();
+            }
         }
     }
     else
     {
         movSettings->setLockTimerRunning(false);
-    }
+    }    
 
     if(!well.inBounds(currentPiece))
     {

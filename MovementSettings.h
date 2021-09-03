@@ -9,8 +9,8 @@ public:
 	MovementSettings(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed);
 
 	void init();
-	void runLockTimer();
-	void stopLockTimer();
+	void restartLockDelay();
+	void updateLockTimer();
 	void restartLockTimer();
 	void restartFallTimer();
 	void restartDASTimer();
@@ -36,6 +36,7 @@ public:
 	void setSoftDropSpeed(unsigned int softDropSpeed);
 
 private:
+	float lastLockTimerElapsed = 0.0f;
 	float lockDelay;
 	float lockDelayLeft;
 	float fallDelay;

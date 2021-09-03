@@ -1,5 +1,7 @@
 #include "MovementSettings.h"
 
+#include <iostream>
+
 MovementSettings::MovementSettings()
 {
 	lockDelay = 0.0f;
@@ -9,12 +11,14 @@ MovementSettings::MovementSettings()
 	das = 0.0f;
 	moveSpeed = 0;
 	softDropSpeed = 0;
+	lastLockTimerElapsed = 0.0f;
 }
 
 MovementSettings::MovementSettings(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed)
 {
+	lastLockTimerElapsed = 0.0f;
 	this->lockDelay = lockDelay;
-	lockDelayLeft = lockDelay;
+	lockDelayLeft = this->lockDelay;
 	lockTimerRunning = false;
 	this->fallDelay = fallDelay;
 	this->das = das;
@@ -25,6 +29,7 @@ MovementSettings::MovementSettings(float lockDelay, float fallDelay, float das, 
 void MovementSettings::init()
 {
 	lockTimerRunning = false;
+	restartLockDelay();
 	restartLockTimer();
 	restartFallTimer();
 	restartDASTimer();
@@ -32,22 +37,25 @@ void MovementSettings::init()
 	restartSoftDropTimer();
 }
 
-void MovementSettings::runLockTimer()
+void MovementSettings::restartLockDelay()
 {
-	lockTimerRunning = true;
-	lockTimer.restart();
+	lockDelayLeft = lockDelay;
+	lastLockTimerElapsed = 0.0f;
+	restartLockTimer();
 }
 
-void MovementSettings::stopLockTimer()
+void MovementSettings::updateLockTimer()
 {
-	lockTimerRunning = true;
-	lockDelayLeft -= lockTimer.getElapsedTime().asSeconds();
-	lockTimer.restart();
+	float elapse = lockTimer.getElapsedTime().asSeconds();
+	float delta = elapse - lastLockTimerElapsed;
+	lastLockTimerElapsed = elapse;
+	lockDelayLeft -= delta;
+	std::cout << lockDelayLeft << std::endl;
 }
 
 void MovementSettings::restartLockTimer()
 {
-	lockDelayLeft = lockDelay;
+	lockTimer.restart();
 }
 
 void MovementSettings::restartFallTimer()

@@ -55,6 +55,11 @@ const std::deque<int> PieceManager::getHistory()
 	return history;
 }
 
+int PieceManager::getHold()
+{
+	return hold;
+}
+
 void PieceManager::generateNext()
 {
 	int tetromino = 0;

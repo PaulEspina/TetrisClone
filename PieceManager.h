@@ -19,6 +19,7 @@ public:
 
 	const std::deque<int> getBag();
 	const std::deque<int> getHistory();
+	int getHold();
 
 private:
 	std::deque<int> history;

@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "MovementSettings.h"
+#include "Bag.h"
 #include "Well.h"
 #include "KeyManager.h"
 #include "PieceManager.h"
@@ -22,6 +23,8 @@ private:
 	MovementSettings *movSettings;
 	PieceManager pieceMan;
 	Well well;
+	Bag bag;
+	PieceBox holdBox;
 	Tetromino currentPiece;
 
 	void dropPiece();

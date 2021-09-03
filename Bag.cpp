@@ -28,7 +28,7 @@ void Bag::init()
     std::deque<int> bag = pieceMan->getBag();
     for(unsigned int i = 0; i < slotSize; i++)
     {
-        slots.push_back(Slot(pos + sf::Vector2f(0, i * (blockSize * GRID_HEIGHT)), blockSize));
+        slots.push_back(PieceBox(pos + sf::Vector2f(0, i * (blockSize * GRID_HEIGHT)), blockSize));
     }
 }
 
@@ -45,15 +45,15 @@ void Bag::update()
 void Bag::render(sf::RenderWindow &window)
 {
     window.draw(rect);
-    for(Slot &slot : slots)
+    for(PieceBox &slot : slots)
     {
         slot.render(window);
     }
 }
 
-// Box Class
+// PieceBox Class
 
-Bag::Slot::Slot()
+PieceBox::PieceBox()
 {
     pos = sf::Vector2f(0, 0);
     setPieceType(0);
@@ -61,7 +61,7 @@ Bag::Slot::Slot()
     init();
 }
 
-Bag::Slot::Slot(sf::Vector2f pos, unsigned int blockSize)
+PieceBox::PieceBox(sf::Vector2f pos, unsigned int blockSize)
 {
     this->pos = pos;
     setPieceType(0);
@@ -69,7 +69,7 @@ Bag::Slot::Slot(sf::Vector2f pos, unsigned int blockSize)
     init();
 }
 
-Bag::Slot::Slot(sf::Vector2f pos, unsigned int pieceType, unsigned int blockSize)
+PieceBox::PieceBox(sf::Vector2f pos, unsigned int pieceType, unsigned int blockSize)
 {
     this->pos = pos;
     setPieceType(pieceType);
@@ -77,7 +77,7 @@ Bag::Slot::Slot(sf::Vector2f pos, unsigned int pieceType, unsigned int blockSize
     init();
 }
 
-void Bag::Slot::init()
+void PieceBox::init()
 {
     blocks.clear();
     blockRects.clear();
@@ -96,7 +96,7 @@ void Bag::Slot::init()
     }
 }
 
-void Bag::Slot::update()
+void PieceBox::update()
 {
     for(unsigned int i = 0; i < blockRects.size(); i++)
     {
@@ -132,7 +132,7 @@ void Bag::Slot::update()
     //
 }
 
-void Bag::Slot::render(sf::RenderWindow &window)
+void PieceBox::render(sf::RenderWindow &window)
 {
     for(sf::RectangleShape block : blockRects)
     {
@@ -140,7 +140,7 @@ void Bag::Slot::render(sf::RenderWindow &window)
     }
 }
 
-void Bag::Slot::setPieceType(unsigned int pieceType)
+void PieceBox::setPieceType(unsigned int pieceType)
 {
     init();
     piece = Tetromino(pieceType);

@@ -12,6 +12,13 @@ void Game::init()
     currentPiece = Tetromino(pieceMan.next());
     well = Well(sf::Vector2f(50, 50));
     movSettings->init();
+    well.init();
+    pieceMan.init();
+    currentPiece = Tetromino(pieceMan.next());
+    holdBox = PieceBox(sf::Vector2f(350, 500), 25);
+    holdBox.init();
+    bag = Bag(sf::Vector2f(350, 125), pieceMan, 5, 15);
+    bag.init();
 }
 
 void Game::tick(KeyManager &keyManager)
@@ -111,6 +118,7 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::LShift))
     {
         pieceMan.swap(currentPiece);
+        holdBox.setPieceType(pieceMan.getHold());
         if(!currentPiece.isAtBottom() && movSettings->shouldSoftDrop())
         {
             movSettings->restartSoftDropTimer();
@@ -123,15 +131,14 @@ void Game::tick(KeyManager &keyManager)
     }
     if(keyManager.isPressed(sf::Keyboard::R))
     {
-        well.init();
-        pieceMan.init();
-        currentPiece = Tetromino(pieceMan.next());
-        movSettings->restartFallTimer();
+        init();
     }
 }
 
 void Game::update()
 {
+    holdBox.update();
+    bag.update();
     if(!currentPiece.isAtBottom() && movSettings->shouldFall())
     {
         currentPiece.move(sf::Vector2i(0, 1));
@@ -180,7 +187,9 @@ void Game::render(sf::RenderWindow &window)
 {
     window.clear();
 
-    well.render(&window);
+    well.render(window);
+    holdBox.render(window);
+    bag.render(window);
 
     window.display();
 }

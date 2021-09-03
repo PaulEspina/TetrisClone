@@ -2,11 +2,11 @@
 
 #include <SFML/System.hpp>
 
-class MovementSettings
+class MovementTimer
 {
 public:
-	MovementSettings();
-	MovementSettings(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed);
+	MovementTimer();
+	MovementTimer(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed);
 
 	void init();
 	void restartLockDelay();

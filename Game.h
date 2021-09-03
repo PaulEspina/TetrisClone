@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <time.h>
 
-#include "MovementSettings.h"
+#include "MovementTimer.h"
 #include "Bag.h"
 #include "Well.h"
 #include "KeyManager.h"
@@ -13,14 +13,14 @@
 class Game
 {
 public:
-	Game(MovementSettings &movSettings);
+	Game(MovementTimer &moveTimer);
 
 	void init();
 	void tick(KeyManager &keyManager);
 	void update();
 	void render(sf::RenderWindow &window);
 private:
-	MovementSettings *movSettings;
+	MovementTimer *moveTimer;
 	PieceManager pieceMan;
 	Well well;
 	Bag bag;

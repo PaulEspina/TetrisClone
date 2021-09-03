@@ -1,8 +1,8 @@
 #include "Game.h"
 
-Game::Game(MovementSettings &movSettings)
+Game::Game(MovementTimer &moveTimer)
 {
-    this->movSettings = &movSettings;
+    this->moveTimer = &moveTimer;
     init();
 }
 
@@ -11,7 +11,7 @@ void Game::init()
     srand((unsigned int) time(0));
     currentPiece = Tetromino(pieceMan.next());
     well = Well(sf::Vector2f(50, 50));
-    movSettings->init();
+    moveTimer->init();
     well.init();
     pieceMan.init();
     currentPiece = Tetromino(pieceMan.next());
@@ -52,20 +52,20 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::Left))
     {
         moveLeft(currentPiece, well);
-        movSettings->restartMoveTimer();
-        movSettings->restartDASTimer();
+        moveTimer->restartMoveTimer();
+        moveTimer->restartDASTimer();
         currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Left))
     {
-        if(movSettings->shouldDAS() && movSettings->shouldMove())
+        if(moveTimer->shouldDAS() && moveTimer->shouldMove())
         {
             moveLeft(currentPiece, well);
-            movSettings->restartMoveTimer();
+            moveTimer->restartMoveTimer();
         }
         if(currentPiece.isAtBottom())
         {
-            movSettings->restartFallTimer();
+            moveTimer->restartFallTimer();
         }
     }
     if(keyManager.isReleased(sf::Keyboard::Right))
@@ -75,20 +75,20 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::Right))
     {
         moveRight(currentPiece, well);
-        movSettings->restartMoveTimer();
-        movSettings->restartDASTimer();
+        moveTimer->restartMoveTimer();
+        moveTimer->restartDASTimer();
         currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Right))
     {
-        if(movSettings->shouldDAS() && movSettings->shouldMove())
+        if(moveTimer->shouldDAS() && moveTimer->shouldMove())
         {
             moveRight(currentPiece, well);
-            movSettings->restartMoveTimer();
+            moveTimer->restartMoveTimer();
         }
         if(currentPiece.isAtBottom())
         {
-            movSettings->restartFallTimer();
+            moveTimer->restartFallTimer();
         }
     }
     if(keyManager.isReleased(sf::Keyboard::Right))
@@ -101,12 +101,12 @@ void Game::tick(KeyManager &keyManager)
     }
     if(keyManager.isDown(sf::Keyboard::Down))
     {
-        if(movSettings->shouldSoftDrop())
+        if(moveTimer->shouldSoftDrop())
         {
             moveDown(currentPiece, well);
-            movSettings->restartSoftDropTimer();
+            moveTimer->restartSoftDropTimer();
         }
-        movSettings->restartFallTimer();
+        moveTimer->restartFallTimer();
     }
     if(keyManager.isReleased(sf::Keyboard::Down))
     {
@@ -115,24 +115,24 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::LControl))
     {
         currentPiece.rotateCounterClockwise();
-        movSettings->restartFallTimer();
-        movSettings->setLockTimerRunning(true);
+        moveTimer->restartFallTimer();
+        moveTimer->setLockTimerRunning(true);
     }
     if(keyManager.isPressed(sf::Keyboard::Up))
     {
         currentPiece.rotateClockwise();
-        movSettings->restartFallTimer();
-        movSettings->setLockTimerRunning(true);
+        moveTimer->restartFallTimer();
+        moveTimer->setLockTimerRunning(true);
     }
     if(keyManager.isPressed(sf::Keyboard::LShift))
     {
         pieceMan.swap(currentPiece);
         holdBox.setPieceType(pieceMan.getHold());
-        if(!currentPiece.isAtBottom() && movSettings->shouldSoftDrop())
+        if(!currentPiece.isAtBottom() && moveTimer->shouldSoftDrop())
         {
-            movSettings->restartSoftDropTimer();
+            moveTimer->restartSoftDropTimer();
         }
-        movSettings->restartFallTimer();
+        moveTimer->restartFallTimer();
     }
     if(keyManager.isPressed(sf::Keyboard::Space))
     {
@@ -160,35 +160,35 @@ void Game::update()
     }
     currentPiece.move(sf::Vector2i(0, -1));
 
-    if(movSettings->shouldFall() && !currentPiece.isAtBottom())
+    if(moveTimer->shouldFall() && !currentPiece.isAtBottom())
     {
         currentPiece.move(sf::Vector2i(0, 1));
-        movSettings->restartFallTimer();
+        moveTimer->restartFallTimer();
     }
 
     if(currentPiece.isAtBottom())
     {
-        if(movSettings->shouldLock())
+        if(moveTimer->shouldLock())
         {
             dropPiece();
-            movSettings->restartLockDelay();
+            moveTimer->restartLockDelay();
         }
         else
         {
-            if(movSettings->isLockTimerRunning())
+            if(moveTimer->isLockTimerRunning())
             {
-                movSettings->updateLockTimer();
+                moveTimer->updateLockTimer();
             }
             else
             {
-                movSettings->setLockTimerRunning(true);
-                movSettings->restartLockDelay();
+                moveTimer->setLockTimerRunning(true);
+                moveTimer->restartLockDelay();
             }
         }
     }
     else
     {
-        movSettings->setLockTimerRunning(false);
+        moveTimer->setLockTimerRunning(false);
     }    
 
     if(!well.inBounds(currentPiece))
@@ -215,5 +215,5 @@ void Game::dropPiece()
 {
     well.dropCurrentPiece();
     currentPiece = Tetromino(pieceMan.next());
-    movSettings->restartFallTimer();
+    moveTimer->restartFallTimer();
 }

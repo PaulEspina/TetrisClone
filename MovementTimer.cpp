@@ -1,8 +1,6 @@
-#include "MovementSettings.h"
+#include "MovementTimer.h"
 
-#include <iostream>
-
-MovementSettings::MovementSettings()
+MovementTimer::MovementTimer()
 {
 	lockDelay = 0.0f;
 	lockDelayLeft = 0.0f;
@@ -14,7 +12,7 @@ MovementSettings::MovementSettings()
 	lastLockTimerElapsed = 0.0f;
 }
 
-MovementSettings::MovementSettings(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed)
+MovementTimer::MovementTimer(float lockDelay, float fallDelay, float das, unsigned int moveSpeed, unsigned int softDropSpeed)
 {
 	lastLockTimerElapsed = 0.0f;
 	this->lockDelay = lockDelay;
@@ -26,7 +24,7 @@ MovementSettings::MovementSettings(float lockDelay, float fallDelay, float das, 
 	this->softDropSpeed = softDropSpeed;
 }
 
-void MovementSettings::init()
+void MovementTimer::init()
 {
 	lockTimerRunning = false;
 	restartLockDelay();
@@ -37,130 +35,129 @@ void MovementSettings::init()
 	restartSoftDropTimer();
 }
 
-void MovementSettings::restartLockDelay()
+void MovementTimer::restartLockDelay()
 {
 	lockDelayLeft = lockDelay;
 	lastLockTimerElapsed = 0.0f;
 	restartLockTimer();
 }
 
-void MovementSettings::updateLockTimer()
+void MovementTimer::updateLockTimer()
 {
 	float elapse = lockTimer.getElapsedTime().asSeconds();
 	float delta = elapse - lastLockTimerElapsed;
 	lastLockTimerElapsed = elapse;
 	lockDelayLeft -= delta;
-	std::cout << lockDelayLeft << std::endl;
 }
 
-void MovementSettings::restartLockTimer()
+void MovementTimer::restartLockTimer()
 {
 	lockTimer.restart();
 }
 
-void MovementSettings::restartFallTimer()
+void MovementTimer::restartFallTimer()
 {
 	fallTimer.restart();
 }
 
-void MovementSettings::restartDASTimer()
+void MovementTimer::restartDASTimer()
 {
 	dasTimer.restart();
 }
 
-void MovementSettings::restartMoveTimer()
+void MovementTimer::restartMoveTimer()
 {
 	moveTimer.restart();
 }
 
-void MovementSettings::restartSoftDropTimer()
+void MovementTimer::restartSoftDropTimer()
 {
 	softDropTimer.restart();
 }
 
-bool MovementSettings::shouldLock()
+bool MovementTimer::shouldLock()
 {
 	return lockDelayLeft < 0 ? true : false;
 }
 
-bool MovementSettings::shouldFall()
+bool MovementTimer::shouldFall()
 {
 	return fallTimer.getElapsedTime().asSeconds() > fallDelay ? true : false;
 }
 
-bool MovementSettings::shouldDAS()
+bool MovementTimer::shouldDAS()
 {
 	return dasTimer.getElapsedTime().asSeconds() > das ? true : false;
 }
 
-bool MovementSettings::shouldMove()
+bool MovementTimer::shouldMove()
 {
 	float delay = 1.0f / (float) moveSpeed;
 	return moveTimer.getElapsedTime().asSeconds() > delay ? true : false;
 }
 
-bool MovementSettings::shouldSoftDrop()
+bool MovementTimer::shouldSoftDrop()
 {
 	float delay = 1.0f / (float) softDropSpeed;
 	return softDropTimer.getElapsedTime().asSeconds() > delay ? true : false;
 }
 
-float MovementSettings::getLockDelay()
+float MovementTimer::getLockDelay()
 {
 	return lockDelay;
 }
 
-void MovementSettings::setLockDelay(float lockDelay)
+void MovementTimer::setLockDelay(float lockDelay)
 {
 	this->lockDelay = lockDelay;
 }
 
-bool MovementSettings::isLockTimerRunning()
+bool MovementTimer::isLockTimerRunning()
 {
 	return lockTimerRunning;
 }
 
-void MovementSettings::setLockTimerRunning(bool value)
+void MovementTimer::setLockTimerRunning(bool value)
 {
 	lockTimerRunning = value;
 }
 
-float MovementSettings::getFallDelay()
+float MovementTimer::getFallDelay()
 {
 	return fallDelay;
 }
 
-void MovementSettings::setFallDelay(float fallDelay)
+void MovementTimer::setFallDelay(float fallDelay)
 {
 	this->fallDelay = fallDelay;
 }
 
-float MovementSettings::getDAS()
+float MovementTimer::getDAS()
 {
 	return das;
 }
 
-void MovementSettings::setDAS(float das)
+void MovementTimer::setDAS(float das)
 {
 	this->das = das;
 }
 
-unsigned int MovementSettings::getMoveSpeed()
+unsigned int MovementTimer::getMoveSpeed()
 {
 	return moveSpeed;
 }
 
-void MovementSettings::setMoveSpeed(unsigned int moveSpeed)
+void MovementTimer::setMoveSpeed(unsigned int moveSpeed)
 {
 	this->moveSpeed = moveSpeed;
 }
 
-unsigned int MovementSettings::getSoftDropSpeed()
+unsigned int MovementTimer::getSoftDropSpeed()
 {
 	return softDropSpeed;
 }
 
-void MovementSettings::setSoftDropSpeed(unsigned int softDropSpeed)
+void MovementTimer::setSoftDropSpeed(unsigned int softDropSpeed)
 {
 	this->softDropSpeed;
 }

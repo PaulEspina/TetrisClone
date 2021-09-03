@@ -10,8 +10,8 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
     
-    MovementSettings movSettings(1.0f, 0.5f, 0.2f, 20, 20);
-    Game game(movSettings);
+    MovementTimer moveTimer(1.0f, 0.5f, 0.2f, 20, 20);
+    Game game(moveTimer);
     KeyManager keyManager;
 
     while(window.isOpen())
@@ -27,11 +27,11 @@ int main()
             keyManager.update(event);
         }
         game.tick(keyManager);
-        /*if(clock.getElapsedTime().asMilliseconds() > (1000 / TICKPERSECOND))
-        {*/
+        if(clock.getElapsedTime().asMilliseconds() > (1000 / TICKPERSECOND))
+        {
             game.update();
             clock.restart();
-        /*}*/
+        }
         game.render(window);
     }
 

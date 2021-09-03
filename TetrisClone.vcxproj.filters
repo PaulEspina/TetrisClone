@@ -6,8 +6,8 @@
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="PieceManager.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="MovementSettings.h" />
     <ClInclude Include="Bag.h" />
+    <ClInclude Include="MovementTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -16,7 +16,7 @@
     <ClCompile Include="Well.cpp" />
     <ClCompile Include="Tetromino.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="MovementSettings.cpp" />
     <ClCompile Include="Bag.cpp" />
+    <ClCompile Include="MovementTimer.cpp" />
   </ItemGroup>
 </Project>

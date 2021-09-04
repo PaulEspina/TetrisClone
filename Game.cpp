@@ -43,12 +43,15 @@ void Game::tick(KeyManager &keyManager)
     }; 
     auto moveDown = [](Tetromino &currentPiece, Well &well)
     {
+        bool success = true;
         currentPiece.move(sf::Vector2i(0, 1));
         if(!well.inBounds(currentPiece))
         {
+            success = false;
             currentPiece.setAtBottom(true);
             currentPiece.move(sf::Vector2i(0, -1));
         }
+        return success;
     };
 
     if(keyManager.isPressed(sf::Keyboard::Left))
@@ -56,7 +59,6 @@ void Game::tick(KeyManager &keyManager)
         moveLeft(currentPiece, well);
         moveTimer->restartMoveTimer();
         moveTimer->restartDASTimer();
-        currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Left))
     {
@@ -70,16 +72,11 @@ void Game::tick(KeyManager &keyManager)
             moveTimer->restartFallTimer();
         }
     }
-    if(keyManager.isReleased(sf::Keyboard::Right))
-    {
-        currentPiece.setDropLock(false);
-    }
     if(keyManager.isPressed(sf::Keyboard::Right))
     {
         moveRight(currentPiece, well);
         moveTimer->restartMoveTimer();
         moveTimer->restartDASTimer();
-        currentPiece.setDropLock(true);
     }
     if(keyManager.isDown(sf::Keyboard::Right))
     {
@@ -93,38 +90,35 @@ void Game::tick(KeyManager &keyManager)
             moveTimer->restartFallTimer();
         }
     }
-    if(keyManager.isReleased(sf::Keyboard::Right))
-    {
-        currentPiece.setDropLock(false);
-    }
-    if(keyManager.isPressed(sf::Keyboard::Down))
-    {
-        currentPiece.setDropLock(true);
-    }
     if(keyManager.isDown(sf::Keyboard::Down))
     {
         if(moveTimer->shouldSoftDrop())
         {
-            moveDown(currentPiece, well);
+            if(moveDown(currentPiece, well))
+            {
+                moveTimer->setLockTimerRunning(false);
+            }
             moveTimer->restartSoftDropTimer();
         }
         moveTimer->restartFallTimer();
     }
-    if(keyManager.isReleased(sf::Keyboard::Down))
-    {
-        currentPiece.setDropLock(false);
-    }
     if(keyManager.isPressed(sf::Keyboard::LControl))
     {
         currentPiece.rotateCounterClockwise();
-        moveTimer->restartFallTimer();
         moveTimer->setLockTimerRunning(true);
+        if(currentPiece.isAtBottom())
+        {
+            moveTimer->restartFallTimer();
+        }
     }
     if(keyManager.isPressed(sf::Keyboard::Up))
     {
         currentPiece.rotateClockwise();
-        moveTimer->restartFallTimer();
         moveTimer->setLockTimerRunning(true);
+        if(currentPiece.isAtBottom())
+        {
+            moveTimer->restartFallTimer();
+        }
     }
     if(keyManager.isPressed(sf::Keyboard::LShift))
     {
@@ -154,11 +148,13 @@ void Game::update()
 
     if(!gameOver)
     {
+        // game over check
         if(well.getOccupiedHeight() > well.getWellHeight())
         {
             gameOver = true;
         }
 
+        // checks if the piece cannot move down
         currentPiece.move(sf::Vector2i(0, 1));
         if(!well.inBounds(currentPiece))
         {
@@ -170,41 +166,46 @@ void Game::update()
         }
         currentPiece.move(sf::Vector2i(0, -1));
 
-        if(moveTimer->shouldFall() && !currentPiece.isAtBottom())
-        {
-            currentPiece.move(sf::Vector2i(0, 1));
-            moveTimer->restartFallTimer();
-        }
-
         if(currentPiece.isAtBottom())
         {
-            if(moveTimer->shouldLock())
+            // the locking mechanism
+            if(moveTimer->isLockTimerRunning())
             {
-                dropPiece();
-                moveTimer->restartLockDelay();
-            }
-            else
-            {
-                if(moveTimer->isLockTimerRunning())
+                if(moveTimer->shouldLock())
                 {
-                    moveTimer->updateLockTimer();
+                    dropPiece();
+                    moveTimer->restartLockDelay();
+                    moveTimer->setLockTimerRunning(false);
                 }
                 else
                 {
-                    moveTimer->setLockTimerRunning(true);
-                    moveTimer->restartLockDelay();
+                    moveTimer->updateLockTimer();
                 }
+            }
+            else
+            {
+                moveTimer->setLockTimerRunning(true);
+                moveTimer->restartLockDelay();
             }
         }
         else
         {
-            moveTimer->setLockTimerRunning(false);
+            // moves the piece down
+            if(moveTimer->shouldFall())
+            {
+                currentPiece.move(sf::Vector2i(0, 1));
+                moveTimer->restartFallTimer();
+                moveTimer->restartLockDelay();
+                moveTimer->setLockTimerRunning(false);
+            }
         }
 
+        // collision checking
         if(!well.inBounds(currentPiece))
         {
             well.findValidGrid(currentPiece);
         }
+
         well.previewDrop(currentPiece);
         well.showCurrentPiece(currentPiece);
         well.update();

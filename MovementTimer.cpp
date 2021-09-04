@@ -1,5 +1,7 @@
 #include "MovementTimer.h"
 
+#include <iostream>
+
 MovementTimer::MovementTimer()
 {
 	lockDelay = 0.0f;
@@ -48,6 +50,7 @@ void MovementTimer::updateLockTimer()
 	float delta = elapse - lastLockTimerElapsed;
 	lastLockTimerElapsed = elapse;
 	lockDelayLeft -= delta;
+	std::cout << lockDelayLeft << std::endl;
 }
 
 void MovementTimer::restartLockTimer()

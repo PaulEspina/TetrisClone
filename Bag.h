@@ -45,6 +45,23 @@ public:
 
 	void setPieceType(unsigned int pieceType);
 private:
+	void construct(sf::Vector2f pos, unsigned int pieceType, unsigned int blockSize)
+	{
+		this->pos = pos;
+		setPieceType(pieceType);
+		this->blockSize = blockSize;
+		init();
+		for(unsigned int i = 0; i < GRID_HEIGHT; i++)
+		{
+			for(unsigned int j = 0; j < GRID_WIDTH; j++)
+			{
+				sf::RectangleShape block(sf::Vector2f(blockSize, blockSize));
+				block.setPosition(sf::Vector2f(j * blockSize, i * blockSize) + pos);
+				block.setOutlineThickness(1);
+				blockRects.push_back(block);
+			}
+		}
+	}
 	unsigned int blockSize;
 
 	sf::Vector2f pos;

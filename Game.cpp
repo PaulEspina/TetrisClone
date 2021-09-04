@@ -3,6 +3,7 @@
 Game::Game(MovementTimer &moveTimer)
 {
     this->moveTimer = &moveTimer;
+    pieceMan = PieceManager(1);
     init();
 }
 
@@ -137,6 +138,7 @@ void Game::tick(KeyManager &keyManager)
     if(keyManager.isPressed(sf::Keyboard::Space))
     {
         dropPiece();
+        pieceMan.resetHoldRepeat();
     }
     if(keyManager.isPressed(sf::Keyboard::R))
     {
@@ -162,7 +164,7 @@ void Game::update()
 
     if(moveTimer->shouldFall() && !currentPiece.isAtBottom())
     {
-        currentPiece.move(sf::Vector2i(0, 1));
+        //currentPiece.move(sf::Vector2i(0, 1));
         moveTimer->restartFallTimer();
     }
 

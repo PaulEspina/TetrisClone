@@ -12,10 +12,12 @@ class PieceManager
 {
 public:
 	PieceManager();
+	PieceManager(int holdAllowedRepeat);
 
 	void init();
 	int next();
 	void swap(Tetromino &tetromino);
+	void resetHoldRepeat();
 
 	const std::deque<int> getBag();
 	const std::deque<int> getHistory();
@@ -25,6 +27,7 @@ private:
 	std::deque<int> history;
 	std::deque<int> bag;
 	int hold;
-
+	int holdAllowedRepeat;
+	int holdRemainingRepeat;
 	void generateNext();
 };

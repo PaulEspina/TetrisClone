@@ -55,42 +55,28 @@ void Bag::render(sf::RenderWindow &window)
 
 PieceBox::PieceBox()
 {
-    pos = sf::Vector2f(0, 0);
-    setPieceType(0);
-    blockSize = 0;
-    init();
+    construct(sf::Vector2f(0, 0), 0, 0);
 }
 
 PieceBox::PieceBox(sf::Vector2f pos, unsigned int blockSize)
 {
-    this->pos = pos;
-    setPieceType(0);
-    this->blockSize = blockSize;
-    init();
+    construct(pos, 0, blockSize);
 }
 
 PieceBox::PieceBox(sf::Vector2f pos, unsigned int pieceType, unsigned int blockSize)
 {
-    this->pos = pos;
-    setPieceType(pieceType);
-    this->blockSize = blockSize;
-    init();
+    construct(pos, pieceType, blockSize);
 }
 
 void PieceBox::init()
 {
     blocks.clear();
-    blockRects.clear();
     for(unsigned int i = 0; i < GRID_HEIGHT; i++)
     {
         std::vector<char> row;
         for(unsigned int j = 0; j < GRID_WIDTH; j++)
         {
             row.push_back('0');
-            sf::RectangleShape block(sf::Vector2f(blockSize, blockSize));
-            block.setPosition(sf::Vector2f(j * blockSize, i * blockSize) + pos);
-            block.setOutlineThickness(1);
-            blockRects.push_back(block);
         }
         blocks.push_back(row);
     }

@@ -3,6 +3,14 @@
 PieceManager::PieceManager()
 {
 	srand((unsigned int) time(0));
+	holdAllowedRepeat = 0;
+	init();
+}
+
+PieceManager::PieceManager(int holdAllowedRepeat)
+{
+	srand((unsigned int) time(0));
+	this->holdAllowedRepeat = holdAllowedRepeat;
 	init();
 }
 
@@ -11,6 +19,7 @@ void PieceManager::init()
 	bag.clear();
 	history.clear();
 	hold = 0;
+	holdRemainingRepeat = holdAllowedRepeat;
 	std::vector<int> tetrominos = {1, 2, 3, 4, 5, 6, 7};
 	std::shuffle(tetrominos.begin(), tetrominos.end(), std::default_random_engine((unsigned int) time(0)));
 	for(int tetromino : tetrominos)
@@ -33,16 +42,24 @@ int PieceManager::next()
 
 void PieceManager::swap(Tetromino &tetromino)
 {
-	int type = tetromino.getType();
-	if(hold == 0)
+	if(holdRemainingRepeat-- > 0)
 	{
-		tetromino.setType(next());
+		int type = tetromino.getType();
+		if(hold == 0)
+		{
+			tetromino.setType(next());
+		}
+		else
+		{
+			tetromino.setType(hold);
+		}
+		hold = type;
 	}
-	else
-	{
-		tetromino.setType(hold);
-	}
-	hold = type;
+}
+
+void PieceManager::resetHoldRepeat()
+{
+	holdRemainingRepeat = holdAllowedRepeat;
 }
 
 const std::deque<int> PieceManager::getBag()

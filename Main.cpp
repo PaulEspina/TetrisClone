@@ -10,12 +10,16 @@ int main()
     sf::RenderWindow window(sf::VideoMode(800, 800), "Tetris");
     window.setKeyRepeatEnabled(false);
     
-    MovementTimer moveTimer(1.0f, 0.5f, 0.2f, 20, 20);
+    MovementTimer moveTimer(1.0f, 0.25f, 0.2f, 20, 20);
     Game game(moveTimer);
     KeyManager keyManager;
 
     while(window.isOpen())
     {
+        if(game.isGameOver())
+        {
+            game.init();
+        }
         sf::Event event;
         keyManager.prepare();
         while(window.pollEvent(event))
@@ -34,6 +38,5 @@ int main()
         }
         game.render(window);
     }
-
     return 0;
 }

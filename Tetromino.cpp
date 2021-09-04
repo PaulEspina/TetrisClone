@@ -3,34 +3,26 @@
 Tetromino::Tetromino()
 {
     gridPos = sf::Vector2i(0, 0);
-    type = 0;
     atBottom = false;
     dropLock = false;
+    type = 0;
 }
 
 Tetromino::Tetromino(unsigned int type)
 {
-    if(type == 4)
-    {
-        this->gridPos = sf::Vector2i(4, 0);
-    }
-    else
-    {
-        this->gridPos = sf::Vector2i(3, 0);
-    }
-    this->type = type;
-    setType(type);
+    gridPos = sf::Vector2i(0, 0);
     atBottom = false;
     dropLock = false;
+    setType(type);
 }
 
 Tetromino::Tetromino(sf::Vector2i gridPos, unsigned int type)
 {
     this->gridPos = gridPos;
     this->type = type;
-    setType(type);
     atBottom = false;
     dropLock = false;
+    setType(type);
 }
 
 void Tetromino::rotateClockwise()
@@ -66,6 +58,15 @@ void Tetromino::move(sf::Vector2i distance)
 
 void Tetromino::setType(int type)
 {
+    this->type = type;
+    if(type == 4)
+    {
+        this->gridPos = sf::Vector2i(4, 0);
+    }
+    else
+    {
+        this->gridPos = sf::Vector2i(3, 0);
+    }
     std::vector<std::vector<char>> temp;
     int dimension = 3;
     if(type == 1)

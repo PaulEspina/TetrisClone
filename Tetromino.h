@@ -10,7 +10,7 @@ public:
     Tetromino();
     Tetromino(unsigned int type);
     Tetromino(sf::Vector2i gridPos, unsigned int type);
-
+    
     void rotateClockwise();
     void rotateCounterClockwise();
     void move(sf::Vector2i distance);

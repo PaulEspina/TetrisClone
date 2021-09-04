@@ -12,14 +12,14 @@ void Game::init()
     srand((unsigned int) time(0));
     gameOver = false;
     currentPiece = Tetromino(pieceMan.next());
-    well = Well(sf::Vector2f(50, 50));
+    well = Well(sf::Vector2f(150, 50));
     moveTimer->init();
     well.init();
     pieceMan.init();
     currentPiece = Tetromino(pieceMan.next());
-    holdBox = PieceBox(sf::Vector2f(350, 500), 25);
+    holdBox = PieceBox(sf::Vector2f(25, 150), 25);
     holdBox.init();
-    bag = Bag(sf::Vector2f(350, 125), pieceMan, 5, 15);
+    bag = Bag(sf::Vector2f(450, 125), pieceMan, 5, 25);
     bag.init();
 }
 

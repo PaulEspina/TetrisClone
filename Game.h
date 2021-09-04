@@ -19,6 +19,8 @@ public:
 	void tick(KeyManager &keyManager);
 	void update();
 	void render(sf::RenderWindow &window);
+
+	bool isGameOver();
 private:
 	MovementTimer *moveTimer;
 	PieceManager pieceMan;
@@ -26,6 +28,7 @@ private:
 	Bag bag;
 	PieceBox holdBox;
 	Tetromino currentPiece;
+	bool gameOver;
 
 	void dropPiece();
 };

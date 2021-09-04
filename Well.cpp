@@ -352,3 +352,34 @@ void Well::findValidGrid(Tetromino &tetromino)
         }
     }
 }
+
+unsigned int Well::getExtraBlocks()
+{
+    return extraBlocks;
+}
+
+unsigned int Well::getWellWidth()
+{
+    return wellWidth;
+}
+
+unsigned int Well::getWellHeight()
+{
+    return wellHeight;
+}
+
+unsigned int Well::getTrueWellHeight()
+{
+    return trueWellHeight;
+}
+
+unsigned int Well::getBlockSize()
+{
+    return blockSize;
+}
+
+
+unsigned int Well::getOccupiedHeight()
+{
+    return occupiedHeight;
+}

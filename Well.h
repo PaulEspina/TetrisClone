@@ -21,6 +21,12 @@ public:
     bool inBounds(Tetromino tetromino);
     void findValidGrid(Tetromino &tetromino);
 
+    unsigned int getExtraBlocks();
+    unsigned int getWellWidth();
+    unsigned int getWellHeight();
+    unsigned int getTrueWellHeight();
+    unsigned int getBlockSize();
+    unsigned int getOccupiedHeight();
 private:
     unsigned int extraBlocks;
     unsigned int wellWidth;

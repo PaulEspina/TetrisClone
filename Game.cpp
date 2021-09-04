@@ -10,6 +10,7 @@ Game::Game(MovementTimer &moveTimer)
 void Game::init()
 {
     srand((unsigned int) time(0));
+    gameOver = false;
     currentPiece = Tetromino(pieceMan.next());
     well = Well(sf::Vector2f(50, 50));
     moveTimer->init();
@@ -151,55 +152,63 @@ void Game::update()
     holdBox.update();
     bag.update();
 
-    currentPiece.move(sf::Vector2i(0, 1));
-    if(!well.inBounds(currentPiece))
+    if(!gameOver)
     {
-        currentPiece.setAtBottom(true);
-    }
-    else
-    {
-        currentPiece.setAtBottom(false);
-    }
-    currentPiece.move(sf::Vector2i(0, -1));
-
-    if(moveTimer->shouldFall() && !currentPiece.isAtBottom())
-    {
-        //currentPiece.move(sf::Vector2i(0, 1));
-        moveTimer->restartFallTimer();
-    }
-
-    if(currentPiece.isAtBottom())
-    {
-        if(moveTimer->shouldLock())
+        if(well.getOccupiedHeight() > well.getWellHeight())
         {
-            dropPiece();
-            moveTimer->restartLockDelay();
+            gameOver = true;
+        }
+
+        currentPiece.move(sf::Vector2i(0, 1));
+        if(!well.inBounds(currentPiece))
+        {
+            currentPiece.setAtBottom(true);
         }
         else
         {
-            if(moveTimer->isLockTimerRunning())
+            currentPiece.setAtBottom(false);
+        }
+        currentPiece.move(sf::Vector2i(0, -1));
+
+        if(moveTimer->shouldFall() && !currentPiece.isAtBottom())
+        {
+            currentPiece.move(sf::Vector2i(0, 1));
+            moveTimer->restartFallTimer();
+        }
+
+        if(currentPiece.isAtBottom())
+        {
+            if(moveTimer->shouldLock())
             {
-                moveTimer->updateLockTimer();
+                dropPiece();
+                moveTimer->restartLockDelay();
             }
             else
             {
-                moveTimer->setLockTimerRunning(true);
-                moveTimer->restartLockDelay();
+                if(moveTimer->isLockTimerRunning())
+                {
+                    moveTimer->updateLockTimer();
+                }
+                else
+                {
+                    moveTimer->setLockTimerRunning(true);
+                    moveTimer->restartLockDelay();
+                }
             }
         }
-    }
-    else
-    {
-        moveTimer->setLockTimerRunning(false);
-    }    
+        else
+        {
+            moveTimer->setLockTimerRunning(false);
+        }
 
-    if(!well.inBounds(currentPiece))
-    {
-        well.findValidGrid(currentPiece);
+        if(!well.inBounds(currentPiece))
+        {
+            well.findValidGrid(currentPiece);
+        }
+        well.previewDrop(currentPiece);
+        well.showCurrentPiece(currentPiece);
+        well.update();
     }
-    well.previewDrop(currentPiece);
-    well.showCurrentPiece(currentPiece);
-    well.update();
 }
 
 void Game::render(sf::RenderWindow &window)
@@ -211,6 +220,11 @@ void Game::render(sf::RenderWindow &window)
     bag.render(window);
 
     window.display();
+}
+
+bool Game::isGameOver()
+{
+    return gameOver;
 }
 
 void Game::dropPiece()

@@ -19,23 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bag.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="KeyManager.h" />
-    <ClInclude Include="MovementTimer.h" />
-    <ClInclude Include="Tetromino.h" />
-    <ClInclude Include="PieceManager.h" />
-    <ClInclude Include="Well.h" />
+    <ClInclude Include="src\Bag.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\KeyManager.h" />
+    <ClInclude Include="src\MovementTimer.h" />
+    <ClInclude Include="src\Tetromino.h" />
+    <ClInclude Include="src\PieceManager.h" />
+    <ClInclude Include="src\Well.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bag.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="KeyManager.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MovementTimer.cpp" />
-    <ClCompile Include="PieceManager.cpp" />
-    <ClCompile Include="Tetromino.cpp" />
-    <ClCompile Include="Well.cpp" />
+    <ClCompile Include="src\Bag.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\KeyManager.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MovementTimer.cpp" />
+    <ClCompile Include="src\PieceManager.cpp" />
+    <ClCompile Include="src\Tetromino.cpp" />
+    <ClCompile Include="src\Well.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

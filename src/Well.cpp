@@ -19,15 +19,15 @@ Well::Well(sf::Vector2f pos, sf::Vector2u dimension, unsigned int extraBlocks, u
     this->extraBlocks = extraBlocks;
     trueWellHeight = dimension.y + extraBlocks;
     this->blockSize = blockSize;
-    wellRect.setPosition(pos + sf::Vector2f(0, extraBlocks * blockSize));
+    wellRect.setPosition(pos + sf::Vector2f(0, (float) extraBlocks * blockSize));
     wellRect.setFillColor(sf::Color(50, 50, 50));
-    wellRect.setSize(sf::Vector2f(wellWidth * blockSize, wellHeight * blockSize));
+    wellRect.setSize(sf::Vector2f((float) wellWidth * blockSize, (float) wellHeight * blockSize));
     for(unsigned int i = 0; i < trueWellHeight; i++)
     {
         for(unsigned int j = 0; j < wellWidth; j++)
         {
-            sf::RectangleShape rs(sf::Vector2f(blockSize, blockSize));
-            rs.setPosition(sf::Vector2f(j * blockSize, i * blockSize) + pos);
+            sf::RectangleShape rs(sf::Vector2f((float) blockSize, (float) blockSize));
+            rs.setPosition(sf::Vector2f((float) j * blockSize, (float) i * blockSize) + pos);
             rs.setOutlineColor(sf::Color::Black);
             rs.setOutlineThickness(1);
             blockRects.push_back(rs);

@@ -14,7 +14,7 @@ Bag::Bag()
 Bag::Bag(sf::Vector2f pos, PieceManager &pieceMan, unsigned int slotSize, unsigned int blockSize)
 {
     this->pos = pos;
-    this->size = sf::Vector2f(GRID_WIDTH * blockSize, GRID_HEIGHT * blockSize * slotSize);
+    this->size = sf::Vector2f(GRID_WIDTH * (float) blockSize, GRID_HEIGHT * (float) blockSize * slotSize);
 	this->pieceMan = &pieceMan;
     this->slotSize = slotSize;
     this->blockSize = blockSize;
@@ -28,7 +28,7 @@ void Bag::init()
     std::deque<int> bag = pieceMan->getBag();
     for(unsigned int i = 0; i < slotSize; i++)
     {
-        slots.push_back(PieceBox(pos + sf::Vector2f(0, i * (blockSize * GRID_HEIGHT)), blockSize));
+        slots.push_back(PieceBox(pos + sf::Vector2f(0, (float) i * (blockSize * GRID_HEIGHT)), blockSize));
     }
 }
 

@@ -55,8 +55,8 @@ private:
 		{
 			for(unsigned int j = 0; j < GRID_WIDTH; j++)
 			{
-				sf::RectangleShape block(sf::Vector2f(blockSize, blockSize));
-				block.setPosition(sf::Vector2f(j * blockSize, i * blockSize) + pos);
+				sf::RectangleShape block(sf::Vector2f((float) blockSize, (float) blockSize));
+				block.setPosition(sf::Vector2f(j * (float) blockSize, i * (float) blockSize) + pos);
 				block.setOutlineThickness(1);
 				blockRects.push_back(block);
 			}
